@@ -1,0 +1,268 @@
+.card, .venta-productos-container {
+  display: flex;
+}
+
+.card {
+  overflow: hidden;
+}
+
+.venta-productos-container {
+  gap: 15px;
+  width: 100%;
+}
+
+.carrito-venta {
+  flex: 3;
+  overflow: auto;
+}
+
+.detalle-venta {
+  flex: 1;
+  border: 1px solid #ddd;
+  border-radius: 0.6rem;
+  padding: 1rem;
+  min-width: 18rem;
+  box-shadow: 0 0 10px #dad8d8;
+}
+
+.detalle-venta .p-dropdown,
+.detalle-venta .p-inputnumber,
+.detalle-venta .p-checkbox {
+  width: 100%;
+}
+
+.detalle-venta label {
+  display: block;
+  margin-bottom: 3px;
+}
+
+/* Utilidades */
+.ml-auto {
+  margin-left: auto;
+}
+
+.total-venta {
+  font-size: 1.1em;
+  font-weight: bold;
+  margin: 15px 0;
+}
+
+.finalizar-btn {
+  margin-top: auto;
+}
+
+/* Sección de pago */
+.monto-recibido {
+  background-color: #f8fafc;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.cambio-devolver {
+  font-size: 1.25rem;
+  font-weight: 600;
+  text-align: right;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.cambio-positivo {
+  color: #16a34a;
+}
+
+.cambio-negativo {
+  color: #dc2626;
+}
+
+/* Estilos PrimeNG */
+:host ::ng-deep .p-button .p-button-icon {
+  font-size: 1.2rem;
+  display: inline-flex !important;
+}
+
+:host ::ng-deep .p-card {
+  border-radius: 0.5rem;
+}
+
+:host ::ng-deep .p-autocomplete {
+  width: 100% !important;
+}
+
+:host ::ng-deep .barcode-container .p-autocomplete .p-autocomplete-input,
+:host ::ng-deep .p-autocomplete .p-autocomplete-input {
+  width: 100% !important;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 0.5px solid #ddd;
+}
+
+:host ::ng-deep .barcode-container .p-autocomplete-panel {
+  width: 100% !important;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+:host ::ng-deep .barcode-container .p-autocomplete .p-autocomplete-clear-icon {
+  right: 0.75rem;
+  cursor: pointer;
+  color: #6c757d;
+  font-size: 1rem;
+}
+
+:host ::ng-deep .barcode-container .p-autocomplete .p-autocomplete-clear-icon:hover {
+  color: #343a40;
+}
+
+:host ::ng-deep .p-button-info:hover {
+  background: rgb(29 78 216) !important;
+}
+
+:host ::ng-deep .p-button-success:hover {
+  background: rgb(21 128 61) !important;
+}
+
+:host ::ng-deep .p-button-danger:hover {
+  background: rgb(185 28 28) !important;
+}
+
+/* Carrito de ventas */
+.carrito-venta .p-button.p-button-rounded,
+.carrito-venta .p-inputnumber-button {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+/* Clases de texto y botones */
+.texto-pequeno {
+  font-size: 1.2rem;
+}
+
+.boton-pequeno, button.boton-pequeno {
+  font-size: 0.8rem;
+  padding: 0.3rem 0.6rem;
+  min-height: 2.5rem;
+}
+
+/* Contenedores */
+.cliente-container {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  width: 100%;
+}
+
+.cliente-container p-autoComplete {
+  flex: 1 !important;
+}
+
+.cliente-container button {
+  flex-shrink: 0;
+  width: auto;
+}
+
+.reduce-margin {
+  margin-left: 0.1rem;
+}
+
+.barcode-container {
+  margin-bottom: 1rem;
+}
+
+.barcode-container input {
+  font-size: 1.2rem;
+  padding: 0.5rem;
+}
+
+/* Alertas de stock */
+.stock-warning, .stock-alert {
+  color: #ef4444;
+}
+
+.stock-warning {
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
+
+.stock-alert {
+  background-color: #fee2e2;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  margin-left: 0.5rem;
+}
+
+/* Productos */
+.product-item {
+  padding: 0.75rem;
+  border-bottom: 1px solid #e5e7eb;
+  transition: background-color 0.2s;
+}
+
+.product-item:hover {
+  background-color: #f3f4f6;
+}
+
+.product-item:last-child {
+  border-bottom: none;
+}
+
+/* Controles de cantidad */
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Total */
+.total-area {
+  background-color: #dbeafe;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.total-amount {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #1e40af;
+}
+
+/* Media queries */
+@media (max-width: 768px) {
+  .venta-productos-container {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .carrito-venta, .detalle-venta {
+    width: 100%;
+    flex: none;
+  }
+
+  .carrito-venta {
+    order: 1;
+  }
+
+  .detalle-venta {
+    order: 2;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  :host ::ng-deep .p-autocomplete .p-autocomplete-input {
+    font-size: 1rem;
+    padding: 0.4rem;
+  }
+
+  .stock-alert {
+    display: inline-block;
+    margin-top: 0.25rem;
+  }
+
+  .cliente-container {
+    flex-wrap: nowrap;
+  }
+
+  .cliente-container p-autoComplete {
+    min-width: 0;
+  }
+}

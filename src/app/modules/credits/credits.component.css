@@ -1,0 +1,44 @@
+.anulado-row {
+    background-color: rgba(108, 117, 125, 0.15);
+    color: #6c757d;
+  }
+  
+  .tipo-chip {
+    padding: 0.25rem 0.5rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+  }
+  
+  .abono-chip {
+    background-color: #d4edda;
+    color: #155724;
+  }
+  
+  .cargo-chip {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+  
+  .credito-chip {
+    background-color: #cce5ff;
+    color: #004085;
+  }
+  
+  /* Ajuste para hacer el botón más pequeño */
+  .p-button.p-button-sm {
+    font-size: 0.875rem;
+    padding: 0.4rem;
+  }
+  
+  /* Ajustar tamaño del icono dentro del botón */
+  .p-button.p-button-sm .p-button-icon {
+    font-size: 0.875rem;
+  }
+  
+  .text-success {
+    color: #28a745;
+  }
+  
+  .text-danger {
+    color: #dc3545;
+  }

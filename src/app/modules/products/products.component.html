@@ -1,0 +1,197 @@
+<!-- PLANTILLA CRUD -->
+<!-- aqui se llaman  las funciones definidas en el component.ts -->
+<app-crud 
+[Module]="'Productos'"
+[items]="filteredProducts" 
+[columns]="columns" 
+[showStateColumn]="true" 
+[canDelete]="true" 
+[statusField]="'estadoProducto'" 
+
+[canSeeDetail]="true"
+[canChangeStatus]="true" 
+[canExport]="false"
+
+(create)="openCreateModal()"
+(edit)="openEditModal($event)" 
+(delete)="confirmDelete($event)"
+(export)="false"
+(detail)="openShowModal($event)" 
+(search)="searchProduct($event)" 
+(statusChange)="changeProductStatus($event)">
+</app-crud>
+
+<!-- FORMULARIOS -->
+
+<p-dialog [(visible)]="showModal" [style]="{width: '450px','height':'511px'}"
+    [header]="isEditing ? 'Editar Producto' : 'Crear Producto'" [modal]="true" class="p-fluid m-2" appCrudModal
+    [isEditing]="isEditing" (save)="saveProduct()" (cancel)="closeModal()">
+    <ng-template pTemplate="content">
+        <form [formGroup]="productForm">
+
+            <div class="field" [ngClass]="{'error': isFieldInvalid('nombreProducto')}">
+                <label for="nombreProducto">Nombre Producto
+                    <span *ngIf="isFieldEmpty('nombreProducto')" class="required">*</span>
+                </label>
+                <input type="text" pInputText id="nombreProducto" formControlName="nombreProducto" required autofocus />
+                <small class="p-error" *ngIf="isFieldInvalid('nombreProducto')">
+                    {{ getErrorMessage('nombreProducto') }}
+                </small>
+            </div>
+            <!-- pa mostrar los campos al frente -->
+
+            <div class="field-group">
+                <div class="field" [ngClass]="{'error': isFieldInvalid('idCategoria')}">
+                    <label for="categoria">Categoría 
+                        <span *ngIf="isFieldEmpty('idCategoria')" class="required">*</span>
+                    </label>
+                    <div class="p-inputgroup">
+                        <p-dropdown [options]="filteredCategories" formControlName="idCategoria" optionLabel="nombreCategoria"
+                            optionValue="idCategoria" placeholder="Seleccionar categoría" [virtualScroll]="false"
+                            [virtualScrollItemSize]="38" styleClass="w-full">
+                        </p-dropdown>
+                        <button pButton pRipple type="button" icon="pi pi-plus"
+                            class="p-button p-button-success p-button-icon-only p-button-sm ml-2"
+                            (click)="openCategoryModal()" pTooltip="Crear categoria"></button>
+                    </div>
+                    <small class="p-error" *ngIf="isFieldInvalid('idCategoria')">
+                        {{ getErrorMessage('idCategoria') }}
+                    </small>
+                </div>
+            </div>
+
+            <!-- formulario para categoria en -->
+            <!-- Modal for Adding Category -->
+            <p-dialog header="Agregar Categoría" [modal]="true" [(visible)]="categoryModalVisible"
+                [style]="{width: '500px', minWidth: '300px'}">
+                <ng-template pTemplate="content">
+                    <form [formGroup]="categorieForm">
+                        <!-- pa mostrar los campos al frenta -->
+                        <div class="field-group">
+                            <div class="field" [ngClass]="{'error': isFieldInvalidCategori('nombreCategoria')}">
+                                <label for="nombreCategoria">Nombre Categoría <span style="color: #E24C4C;">*</span></label>
+                                <input type="text" pInputText id="nombreCategoria" formControlName="nombreCategoria"
+                                    required autofocus />
+                                <small class="p-error" *ngIf="isFieldInvalidCategori('nombreCategoria')">
+                                    {{ getErrorMessageCategori('nombreCategoria') }}
+                                </small>
+                            </div>
+
+                            <div class="field" [ngClass]="{'error': isFieldInvalidCategori('descripcionCategoria')}">
+                                <label for="descripcionCategoria">Descripción</label>
+                                <input type="text" pInputText id="descripcionCategoria"
+                                    formControlName="descripcionCategoria" />
+                                <small class="p-error" *ngIf="isFieldInvalidCategori('descripcionCategoria')">
+                                    {{ getErrorMessageCategori('descripcionCategoria') }}
+                                </small>
+                            </div>
+                        </div>
+                    </form>
+                </ng-template>
+                <ng-template pTemplate="footer">
+                    <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"
+                        (click)="categoryModalVisible = false"></button>
+                    <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text custom-save-btn"
+                        (click)="saveCategory()"></button>
+                </ng-template>
+            </p-dialog>
+
+
+
+            <div class="field-group">
+                <div class="field" [ngClass]="{'error': isFieldInvalid('precioVenta')}">
+                    <label for="precioVenta">Precio venta 
+                        <span *ngIf="isFieldEmpty('precioVenta')" class="required">*</span>
+                    </label>
+                    <input type="number" pInputText id="precioVenta" formControlName="precioVenta" required autofocus />
+                    <small class="p-error" *ngIf="isFieldInvalid('precioVenta')">
+                        {{ getErrorMessage('precioVenta') }}
+                    </small>
+                </div>
+                <p-chip *ngIf="" 
+        label="Compra: 10000"
+        styleClass="mr-2"></p-chip>
+                <!-- <div class="field">
+                    <label for="stock">Stock</label>
+                    <input type="number" pInputText id="stock" formControlName="stock"/>
+                </div> -->
+            </div>
+
+
+            <div class="fiel-group">
+                <div class="field">
+                    <label for="precioVenta">Cargar imagen</label>
+                    <p-fileUpload mode="basic" chooseLabel="Subir" chooseIcon="pi pi-upload" name="imagenProducto"
+                        (onSelect)="onFileSelect($event)" accept="image/*" maxFileSize="1000000"
+                        [style]="{'margin-top':'5px'}">
+                    </p-fileUpload>
+                </div>
+            </div>
+
+
+        </form>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text custom-cancel-btn"
+            (click)="closeModal()" (click)="cancelModalMessage()"></button>
+        <button pButton pRipple [label]="isEditing ? 'Actualizar' : 'Guardar'" icon="pi pi-check"
+            class="p-button-text custom-save-btn" (click)="saveProduct()"></button>
+    </ng-template>
+</p-dialog>
+
+<!-- modal para ver detalle producto inicio -->
+<p-dialog [(visible)]="viewModal" [style]="{width: '500px', 'height':'400px'}" [header]="'Información del Producto'" [modal]="true" class="p-fluid">
+    <ng-template pTemplate="content">
+
+        <div class="product-details-container">
+            <div class="image-container">
+                <img [src]="getImageUrl(selectedProduct.idProducto)" alt="{{ selectedProduct.nombreProducto }}">
+            </div>
+
+            <div class="product-info">
+                <div class="field">
+                    <label for="nombreProducto">Nombre Producto:
+                        <span>{{ selectedProduct.nombreProducto }}</span>
+                    </label>
+                </div>
+
+                <div class="field">
+                    <label for="categoria">Categoría:
+                        <span>{{ getNameCategory(selectedProduct.idCategoria) }}</span>
+                    </label>
+                </div>
+
+                <div class="field">
+                    <label for="precioVenta">Precio venta:
+                        <span>{{ selectedProduct.precioVenta | currency }}</span>
+                    </label>
+                </div>
+
+                <div class="field">
+                    <label for="stock">Stock:
+                        <span>{{ selectedProduct.stock }}</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+
+        <!-- Tabla de códigos de barra -->
+        <div class="barcode-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Códigos de Barra</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let codigo of barcodes">
+                        <td>{{ codigo.codigoBarra }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </ng-template>
+</p-dialog>
+<!-- modal para ver detalle producto fin -->

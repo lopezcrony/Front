@@ -1,0 +1,105 @@
+<nav class="sidebar" [ngClass]="{'open': isSidebarVisible, 'collapsed': !isSidebarVisible}">
+  <div class="sidebar-content">
+    <ul>
+      <!-- Dashboard - solo para administradores -->
+      <li *ngIf="hasRole(['Administrador'])" class="item" routerLink="/dashboard" routerLinkActive="active">
+        <i class="pi pi-chart-bar mr-2" style="color:#C62828;"></i><a>Dashboard</a>
+      </li>
+
+      <!-- Menú de Compras -->
+      <li>
+        <a (click)="toggleSubmenu('Shoppings')" class="menu-link">
+          <i class="pi pi-shop mr-2" style="color:#3F51B5;"></i>Compras
+          <i class="bi"
+            [ngClass]="{'bi-chevron-right': !isSubmenuOpen('Shoppings'), 'bi-chevron-down': isSubmenuOpen('Shoppings')}"
+            style="float:right;"></i>
+        </a>
+        <ul [@submenuAnimation]="getSubmenuState('Shoppings')" class="submenu">
+          <li class="item" routerLink="/categories" routerLinkActive="active" (click)="closeSidebar()">
+            <i class="bi bi-tag-fill mr-2" style="color:salmon;"></i><a>Categorías</a>
+          </li>
+          <li class="item" routerLink="/products" routerLinkActive="active" (click)="closeSidebar()">
+            <i class="bi bi-bag mr-2" style="color:springgreen;"></i><a>Productos</a>
+          </li>
+          <li class="item" routerLink="/providers" routerLinkActive="active" (click)="closeSidebar()">
+            <i class="pi pi-truck mr-2" style="color:yellowgreen;"></i><a>Proveedores</a>
+          </li>
+          <li class="item" routerLink="/shoppingview" routerLinkActive="active" (click)="closeSidebar()">
+            <i class="bi bi-basket2 mr-2" style="color:crimson;"></i><a>Compras</a>
+          </li>
+        </ul>
+      </li>
+
+      <!-- Menú de Ventas -->
+      <li>
+        <a (click)="toggleSubmenu('Sales')" class="menu-link">
+          <i class="bi bi-coin mr-3" style="color:#29af2f;"></i>Ventas
+          <i class="bi"
+            [ngClass]="{'bi-chevron-right': !isSubmenuOpen('Sales'), 'bi-chevron-down': isSubmenuOpen('Sales')}"
+            style="float:right;"></i>
+        </a>
+        <ul [@submenuAnimation]="getSubmenuState('Sales')" class="submenu">
+          <li class="item" routerLink="/clients" routerLinkActive="active" (click)="closeSidebar()">
+            <i class="bi bi-person-vcard mr-2" style="color:salmon;"></i><a>Clientes</a>
+          </li>
+          <li class="item" routerLink="/sales" routerLinkActive="active" (click)="closeSidebar()">
+            <i class="bi bi-cash-coin mr-2" style="color:springgreen;"></i><a>Ventas</a>
+          </li>
+          <li class="item" routerLink="/credits" routerLinkActive="active" (click)="closeSidebar()">
+            <i class="bi bi-credit-card mr-2" style="color:yellowgreen;"></i><a>Créditos</a>
+          </li>
+        </ul>
+      </li>
+
+      <!-- Menú de Devoluciones -->
+      <li>
+        <a (click)="toggleSubmenu('Returns')" class="menu-link">
+          <i class="pi pi-sync mr-2" style="color:#7B1FA2;"></i>Devoluciones
+          <i class="bi"
+            [ngClass]="{'bi-chevron-right': !isSubmenuOpen('Returns'), 'bi-chevron-down': isSubmenuOpen('Returns')}"
+            style="float:right;"></i>
+        </a>
+        <ul [@submenuAnimation]="getSubmenuState('Returns')" class="submenu">
+          <li class="item" routerLink="/loss" routerLinkActive="active" (click)="closeSidebar()">
+            <i class="pi pi-exclamation-circle mr-2" style="color:salmon;"></i><a>Pérdidas</a>
+          </li>
+          <li class="item" routerLink="/returnProvider" routerLinkActive="active" (click)="closeSidebar()">
+            <i class="bi bi-bandaid mr-2" style="color:springgreen;"></i><a>Proveedor</a>
+          </li>
+          <li class="item" routerLink="/returnSale" routerLinkActive="active" (click)="closeSidebar()">
+            <i class="bi bi-piggy-bank mr-2" style="color:yellowgreen;"></i><a>Venta</a>
+          </li>
+        </ul>
+      </li>
+
+      <!-- Menú de Configuración - solo para administradores -->
+      <li *ngIf="hasRole(['Administrador'])">
+        <a (click)="toggleSubmenu('config')" class="menu-link">
+          <i class="bi bi-gear mr-2" style="color:darkcyan;"></i>Configuración
+          <i class="bi"
+            [ngClass]="{'bi-chevron-right': !isSubmenuOpen('config'), 'bi-chevron-down': isSubmenuOpen('config')}"
+            style="float:right;"></i>
+        </a>
+        <ul [@submenuAnimation]="getSubmenuState('config')" class="submenu">
+          <li class="item" routerLink="/roles" routerLinkActive="active" (click)="closeSidebar()">
+            <i class="bi bi-suitcase-lg mr-2" style="color:salmon;"></i><a>Roles</a>
+          </li>
+          <li class="item" routerLink="/users" routerLinkActive="active" (click)="closeSidebar()">
+            <i class="bi bi-person-lines-fill mr-2" style="color:salmon;"></i><a>Usuarios</a>
+          </li>
+        </ul>
+      </li>
+
+    </ul>
+  </div>
+
+  <!-- Sección para la Guía de uso -->
+  <div class="sidebar-help-section">
+    <ul>
+      <li class="item" routerLink="/info" routerLinkActive="active" (click)="closeSidebar()">
+        <i class="pi pi-question-circle mr-2" style="color: #007bff;"></i>
+        <a>Guía de uso</a>
+      </li>
+    </ul>
+  </div>
+</nav>

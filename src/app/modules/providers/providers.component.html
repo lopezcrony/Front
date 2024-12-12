@@ -1,0 +1,75 @@
+<!-- PLANTILLA CRUD -->
+<app-crud 
+  [Module]="'Proveedores'"
+  [items]="filteredProviders" 
+  [columns]="columns" 
+  [canDelete]="false"
+  [canExport]="false" 
+  [canSeeDetail]="false"
+  [canChangeStatus]="true" 
+  [showStateColumn]="true"
+  [statusField]="'estadoProveedor'"
+  (create)="openCreateModal()"
+  (edit)="openEditModal($event)" 
+  (search)="searchProviders($event)"
+  (statusChange)="changeProviderStatus($event)">
+</app-crud>
+
+<!-- FORMULARIOS -->
+
+<p-dialog [(visible)]="showModal" [style]="{width: '450px'}"
+  [header]="isEditing ? 'Editar Proveedor' : 'Crear Proveedor'" [modal]="true" class="p-fluid" appCrudModal
+  [isEditing]="isEditing" (save)="saveProvider()" (cancel)="closeModal()">
+  <ng-template pTemplate="content">
+    <form [formGroup]="providerForm">
+
+      <div class="field-group">
+        <div class="field"
+          [ngClass]="{'error': isFieldInvalid('nitProveedor')}">
+          <label for="nitProveedor">NIT  <span style="color: #E24C4C;">*</span></label>
+          <input type="text" pInputText id="nitProveedor" formControlName="nitProveedor" maxlength="15" required autofocus />
+          <small class="p-error"
+            *ngIf="isFieldInvalid('nitProveedor')">
+            {{ getErrorMessage('nitProveedor') }}
+          </small>
+        </div>
+
+        <div class="field"
+          [ngClass]="{'error': isFieldInvalid('nombreProveedor')}">
+          <label for="nombreProveedor">Empresa <span style="color: #E24C4C;">*</span></label>
+          <input type="text" pInputText id="nombreProveedor" formControlName="nombreProveedor" required autofocus />
+          <small class="p-error"
+            *ngIf="isFieldInvalid('nombreProveedor')">
+            {{ getErrorMessage('nombreProveedor') }}
+          </small>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field"
+          [ngClass]="{'error': isFieldInvalid('direccionProveedor')}">
+          <label for="direccionProveedor">Dirección  <span style="color: #E24C4C;">*</span></label>
+          <input type="text" pInputText id="direccionProveedor" formControlName="direccionProveedor" required autofocus />
+          <small class="p-error"
+            *ngIf="isFieldInvalid('direccionProveedor')">
+            {{ getErrorMessage('direccionProveedor') }}
+          </small>
+        </div>
+
+        <div class="field"
+          [ngClass]="{'error':isFieldInvalid('telefonoProveedor')}">
+          <label for="telefonoProveedor">Teléfono  <span style="color: #E24C4C;">*</span></label>
+          <input type="text" pInputText id="telefonoProveedor" formControlName="telefonoProveedor" maxlength="12" autofocus />
+          <small class="p-error"
+            *ngIf="isFieldInvalid('telefonoProveedor')">
+            {{ getErrorMessage('telefonoProveedor') }}
+          </small>
+        </div>
+      </div>
+    </form>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text custom-cancel-btn" (click)="closeModal()" (click)="cancelModalMessage()"></button>
+    <button pButton pRipple [label]="isEditing ? 'Actualizar' : 'Guardar'" icon="pi pi-check" class="p-button-text custom-save-btn" (click)="saveProvider()"></button>
+  </ng-template>
+</p-dialog>

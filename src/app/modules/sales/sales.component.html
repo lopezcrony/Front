@@ -1,0 +1,267 @@
+<div class="card">
+  <div class="venta-productos-container">
+    <div class="carrito-venta">
+
+      <!-- Header con título y botón de historial -->
+      <div class="flex justify-between items-center mb-3">
+        <div class="flex items-center gap-2">
+          <h1 class="texto-pequeno m-0">Módulo de Ventas</h1>
+        </div>
+        <button pButton pRipple 
+                label="Historial de Ventas" 
+                icon="pi pi-history"
+                class="p-button-secondary p-button-sm boton-pequeno p-button-outlined"
+                routerLink="/detailSales">
+        </button>
+      </div>
+      
+      <!-- Busqueda por nombre de producto y código de barras -->
+      <form [formGroup]="busquedaForm" class="mb-3">
+        <div class="barcode-container m-1">
+          <p-autoComplete #searchInput formControlName="busqueda" [suggestions]="filteredProducts"
+            (completeMethod)="handleSearch($event, searchInput)" (onSelect)="onSelect($event)"
+            (keydown.enter)="onEnterPressed()" [dropdown]="false" [forceSelection]="true" [autoHighlight]="true"
+            placeholder="Buscar por código de barras o nombre del producto" [style]="{'width':'100%'}" autofocus>
+            <ng-template pTemplate="clearicon">
+              <i class="pi pi-times" (click)="clear()"></i>
+            </ng-template>
+
+            <ng-template let-product pTemplate="item">
+              <div class="product-item">
+                <div>{{product.nombreProducto}}</div>
+                <div [class.stock-warning]="product.stock <= 5">
+                  Cantidad: {{product.stock}}
+                  <span *ngIf="product.stock > 0 && product.stock <= 5" class="stock-alert">
+                    ¡Stock bajo!
+                  </span>
+                  <span *ngIf="product.stock === 0" class="stock-alert">
+                    ¡Sin Stock!
+                  </span>
+                </div>
+                <div class="font-bold">{{product.precioVenta | currency}}</div>
+              </div>
+            </ng-template>
+          </p-autoComplete>
+        </div>
+      </form>
+
+      <!-- Tabla de productos en venta -->
+      <p-table [value]="detailSale" styleClass="p-datatable-sm texto-pequeno">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Producto</th>
+            <th>Precio</th>
+            <th>Cantidad</th>
+            <th>Subtotal</th>
+            <th>Acciones</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item>
+          <tr>
+            <td>
+              {{ getProductName(item.idProducto) }}
+              <div *ngIf="getProductStock(item.idProducto) <= 5" class="stock-warning">
+                ¡Quedan solo {{getProductStock(item.idProducto)}} unidades!
+              </div>
+            </td>
+            <td>{{ getProductPrice(item.idProducto) | currency }}</td>
+            <td>
+              <div class="quantity-controls">
+                <button pButton type="button" icon="pi pi-minus" (click)="cambiarCantidad(item, -1)"></button>
+                <p-inputNumber [(ngModel)]="item.cantidadProducto" [min]="1" [showButtons]="false" [size]="3"
+                  (onInput)="onInputCantidad(item)">
+                </p-inputNumber>
+                <button pButton type="button" icon="pi pi-plus" (click)="cambiarCantidad(item, 1)"></button>
+              </div>
+            </td>
+            <td>{{ item.subtotal | currency }}</td>
+            <td>
+              <button pButton icon="pi pi-trash" class="p-button-danger p-button-sm boton-pequeno"
+                (click)="removeProductFromSale(item)">
+              </button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <!-- Detalle de venta -->
+    <div class="detalle-venta">
+      <!-- Switch para imprimir recibo -->
+      <div class="flex align-items-center justify-content-between mb-4 p-3 bg-gray-50 rounded-lg">
+        <div class="flex align-items-center gap-2">
+          <i class="pi pi-print text-gray-600 text-xl"></i>
+          <span class="text-sm font-medium text-gray-700 mt-1">Imprimir Recibo</span>
+        </div>
+        <div class="ml-auto">
+          <p-inputSwitch [(ngModel)]="imprimirRecibo" styleClass="custom-switch"></p-inputSwitch>
+        </div>
+      </div>
+
+      <!-- Total -->
+      <div class="mb-4 p-4 bg-green-50 rounded-lg">
+        <div class="text-sm text-green-600 mb-1">Total a Pagar</div>
+        <div class="text-2xl font-bold text-green-700">
+          {{ total | currency:'USD':'symbol':'1.2-2' }}
+        </div>
+      </div>
+
+      <!-- Sección de pago en efectivo -->
+      <div class="mb-4 p-4 bg-gray-50 rounded-lg">
+        <div class="mb-3">
+          <label class="text-sm text-gray-600">Monto Recibido</label>
+          <p-inputNumber [(ngModel)]="montoRecibido" [min]="0" [showButtons]="false" mode="decimal" currency="USD"
+            (onInput)="calcularCambio()" class="w-full">
+          </p-inputNumber>
+        </div>
+
+        <div class="mt-3">
+          <div class="text-sm text-gray-600 mb-1">Cambio a Devolver</div>
+          <div class="text-xl font-bold" [ngClass]="{'text-blue-600': cambio >= 0, 'text-red-600': cambio < 0}">
+            {{ cambio | currency:'USD':'symbol':'1.2-2' }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Botones de acción -->
+      <div class="action-buttons">
+        <button pButton label="Pago a Crédito" icon="pi pi-credit-card" (click)="showCreditAssignmentModal()"
+          class="p-button-info p-button-sm w-full mb-2 boton-pequeno">
+        </button>
+
+        <button pButton label="Pago de Contado" icon="pi pi-check-circle" (click)="finalizeSale()"
+          class="p-button-success p-button-sm w-full mb-2 boton-pequeno" [disabled]="!isPagoValido()"
+          [style]="{'background': 'rgb(22 163 74)'}">
+        </button>
+
+        <button pButton label="Cancelar" icon="pi pi-times-circle" (click)="cancelSale()"
+          class="p-button-danger p-button-sm w-full boton-pequeno">
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!------------------------- CREAR CRÉDITO ------------------------->
+  <p-dialog header="Asignar Crédito" [(visible)]="showCreditModal" [style]="{width: '50vw'}" [modal]="true"
+    styleClass="texto-pequeno">
+    <div class="p-fluid">
+
+      <form [formGroup]="creditForm">
+
+        <div class="">
+          <div class="p-field mb-2">
+            <label for="cliente" class="block mb-1 texto-pequeno">Cliente <span style="color: #E24C4C;">*</span></label>
+            <div class="cliente-container">
+              <p-autoComplete id="cliente" formControlName="cliente" [suggestions]="filteredCredits"
+                (completeMethod)="searchCreditClient($event)" (onSelect)="onClientSelect($event)" field="nombreCliente"
+                [dropdown]="true" placeholder="Buscar cliente" [style]="{'width':'calc(100% - 5rem)'}"
+                styleClass="texto-pequeno">
+                <ng-template let-cliente pTemplate="item">
+                  <div>{{cliente.nombreCliente}} - CC {{cliente.cedulaCliente}}</div>
+                </ng-template>
+              </p-autoComplete>
+              <button pButton pRipple type="button" icon="pi pi-user-plus"
+                class="p-button-secondary p-button-success p-button-icon-only p-button reduce-margin"
+                style="padding: 0.75rem 3rem;" (click)="showClientModal = true" pTooltip="Crear Cliente"></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- MODAL TO CREATE A CLIENT-->
+        <p-dialog header="Agregar Cliente" [modal]="true" [(visible)]="showClientModal" [style]="{width: '500px'}">
+          <ng-template pTemplate="content">
+            <form [formGroup]="clientForm">
+
+              <div class="field" [ngClass]="{'error': isFieldInvalid('cedulaCliente')}">
+                <label for="cedulaCliente">Cédula <span style="color: #E24C4C;">*</span></label>
+                <input type="text" pInputText id="cedulaCliente" formControlName="cedulaCliente" maxlength="15"
+                  autofocus />
+                <small class="p-error" *ngIf="isFieldInvalid('cedulaCliente')">
+                  {{ getErrorMessage('cedulaCliente') }}
+                </small>
+              </div>
+
+              <div class="field-group">
+                <div class="field" [ngClass]="{'error': isFieldInvalid('nombreCliente')}">
+                  <label for="nombreCliente">Nombre <span style="color: #E24C4C;">*</span></label>
+                  <input type="text" pInputText id="nombreCliente" formControlName="nombreCliente" />
+                  <small class="p-error" *ngIf="isFieldInvalid('nombreCliente')">
+                    {{ getErrorMessage('nombreCliente') }}
+                  </small>
+                </div>
+
+                <div class="field" [ngClass]="{'error': isFieldInvalid('apellidoCliente')}">
+                  <label for="apellidoCliente">Apellido <span style="color: #E24C4C;">*</span></label>
+                  <input type="text" pInputText id="apellidoCliente" formControlName="apellidoCliente" />
+                  <small class="p-error" *ngIf="isFieldInvalid('apellidoCliente')">
+                    {{ getErrorMessage('apellidoCliente') }}
+                  </small>
+                </div>
+              </div>
+
+              <div class="field-group">
+                <div class="field" [ngClass]="{'error': isFieldInvalid('direccionCliente')}">
+                  <label for="direccionCliente">Dirección <span style="color: #E24C4C;">*</span></label>
+                  <input type="text" pInputText id="direccionCliente" formControlName="direccionCliente" />
+                  <small class="p-error" *ngIf="isFieldInvalid('direccionCliente')">
+                    {{ getErrorMessage('direccionCliente') }}
+                  </small>
+                </div>
+
+                <div class="field" [ngClass]="{'error': isFieldInvalid('telefonoCliente')}">
+                  <label for="telefonoCliente">Teléfono <span style="color: #E24C4C;">*</span></label>
+                  <input type="text" pInputText id="telefonoCliente" formControlName="telefonoCliente" minlength="7"
+                    maxlength="10" />
+                  <small class="p-error" *ngIf="isFieldInvalid('telefonoCliente')">
+                    {{ getErrorMessage('telefonoCliente') }}
+                  </small>
+                </div>
+              </div>
+            </form>
+          </ng-template>
+
+          <ng-template pTemplate="footer">
+            <button pButton label="Cancelar" icon="pi pi-times" (click)="cancelClientCreation()"
+              class="p-button-text custom-cancel-btn"></button>
+            <button pButton label="Guardar" icon="pi pi-check" (click)="saveClient()"
+              class="p-button-text custom-save-btn"></button>
+          </ng-template>
+
+        </p-dialog>
+
+
+        <div class="p-field mb-2">
+          <label for="totalVenta" class="block mb-1 texto-pequeno">Total de la Venta</label>
+          <p-inputNumber id="totalVenta" formControlName="totalVenta" [readonly]="true" mode="currency" currency="USD"
+            locale="en-US" [style]="{'width':'100%'}" styleClass="texto-pequeno" autofocus>
+          </p-inputNumber>
+        </div>
+
+        <div class="p-field mb-2">
+          <label for="montoCredito" class="block mb-1 texto-pequeno">Monto a Acreditar <span style="color: #E24C4C;">*</span></label>
+          <p-inputNumber id="montoCredito" formControlName="montoCredito" mode="decimal" currency="COP" locale="en-CO"
+            placeholder="Monto a acreditar" [min]="50" [max]="total" [style]="{'width':'100%'}"
+            styleClass="texto-pequeno">
+          </p-inputNumber>
+        </div>
+
+        <div class="p-field mb-2">
+          <label for="plazoMaximo" class="block mb-1 texto-pequeno">Plazo máximo de pago <span style="color: #E24C4C;">*</span></label>
+          <p-calendar id="plazoMaximo" formControlName="plazoMaximo" [iconDisplay]="'input'" inputId="icondisplay"
+            placeholder="Ingrese la fecha límite de pago" [inputStyle]="{'width':'80%'}" [showIcon]="true"
+            [minDate]="minDate" class="custom-calendar" appendTo="body">
+          </p-calendar>
+        </div>
+
+      </form>
+
+    </div>
+
+    <ng-template pTemplate="footer">
+      <button pButton label="Cancelar" icon="pi pi-times" (click)="cancelarAsignacionCredito()"
+        class="p-button-text custom-cancel-btn"></button>
+      <button pButton label="Confirmar" icon="pi pi-check" (click)="addSaleToCredit()"
+        class="p-button-text custom-save-btn"></button>
+    </ng-template>
+  </p-dialog>

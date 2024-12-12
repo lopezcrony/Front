@@ -1,0 +1,153 @@
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    max-width: 100%;
+}
+
+.full-width {
+    grid-column: span 2;
+}
+
+/* Card Styling */
+::ng-deep .no-border.p-card {
+    border: none !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+    background-color: white;
+    border-radius: 8px !important;
+}
+
+::ng-deep .compact-card .p-card-content {
+    padding: 0.75rem !important;
+}
+
+/* Card Headers */
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.card-header h2 {
+    margin: 0;
+    font-size: 1rem;
+    color: #333;
+    font-weight: 600;
+}
+
+.weekly-sales-chart {
+    height: auto; 
+}
+
+/* Sales Content */
+.sales-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.sales-amount h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #2196f3;
+}
+
+.sales-amount small {
+    color: #6c757d;
+}
+
+.sales-products-row {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.center-content {
+    display: flex;
+    flex-direction: column; /* Ordena verticalmente */
+    justify-content: center;
+    align-items: center; 
+    text-align: center;
+}
+
+
+/* Top Products Section */
+.top-products-content {
+    display: block; 
+    height: 100%;
+}
+
+.chart-container {
+    width: 100%; 
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+}
+
+.top-products-card {
+    height: 100%;
+}
+
+/* Critical Inventory Table */
+::ng-deep .critical-inventory-card .p-datatable {
+    font-size: 0.875rem;
+}
+
+::ng-deep .critical-inventory-card .p-datatable-scrollable-body {
+    max-height: 200px;
+}
+
+.critical-inventory-card .p-datatable {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    font-size: 0.9rem;
+}
+
+.critical-inventory-card .p-datatable-header th {
+    text-align: left;
+    font-weight: bold;
+    background-color: #f5f5f5;
+    padding: 0.75rem;
+}
+
+.critical-inventory-card .p-datatable-tbody td {
+    padding: 0.75rem;
+    vertical-align: middle;
+}
+
+.critical-inventory-card .p-progressbar {
+    background-color: #e9ecef;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .top-products-content {
+        flex-direction: column;
+    }
+
+    .small-chart {
+        margin-bottom: 0.75rem;
+    }
+}
+
+/* Stock Level Color Classes */
+.stock-low {
+    color: #f44336;
+    font-weight: bold;
+}
+
+.stock-medium {
+    color: #ff9800;
+}
+
+.stock-high {
+    color: #4caf50;
+}

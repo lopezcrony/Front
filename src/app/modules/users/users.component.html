@@ -1,0 +1,112 @@
+<!-- PLANTILLA CRUD -->
+<app-crud 
+[Module]="'Usuarios'"
+[items]="filteredUsers" 
+[columns]="columns" 
+[canDelete]="true" 
+[canExport]="false"
+[canSeeDetail]="false" 
+[canChangeStatus]="true"
+[showStateColumn]="true"
+[statusField]="'estadoUsuario'"
+(create)="openCreateModal()"
+(export)="exportUsers()" 
+(edit)="openEditModal($event)" 
+(delete)="confirmDelete($event)"
+(search)="searchUser($event)"
+(statusChange)="changeUserStatus($event)">
+</app-crud>
+
+<!-- FORMULARIOS -->
+<p-dialog [(visible)]="showModal" [style]="{width: '450px'}" [header]="isEditing ? 'Editar Usuario' : 'Crear Usuario'"
+  [modal]="true" class="p-fluid" appCrudModal [isEditing]="isEditing" (save)="saveUser()" (cancel)="closeModal()">
+  <ng-template pTemplate="content">
+    <form [formGroup]="userForm">
+
+      <div class="field-group">
+
+        <div class="field" [ngClass]="{'error': isFieldInvalid('idRol')}">
+          <label for="idRol">Rol<span style="color: #E24C4C;">*</span></label>
+          <p-dropdown [options]="filteredRoles" formControlName="idRol" optionLabel="nombreRol" optionValue="idRol"
+            placeholder="Seleccionar rol"></p-dropdown>
+          <small class="p-error" *ngIf="isFieldInvalid('idRol')">
+            {{ getErrorMessage('idRol') }}
+          </small>
+        </div>
+
+        <div class="field" [ngClass]="{'error': isFieldInvalid('cedulaUsuario'), 'editing-mode': isEditing}">
+          <label for="cedulaUsuario">Cédula<span style="color: #E24C4C;">*</span></label>
+          <input type="text" pInputText id="cedulaUsuario" formControlName="cedulaUsuario" required 
+                 [attr.autofocus]="!isEditing ? true : null" />
+          <small class="p-error" *ngIf="isFieldInvalid('cedulaUsuario')">
+            {{ getErrorMessage('cedulaUsuario') }} 
+          </small>
+        </div>
+        
+
+
+      </div>
+
+      <div class="field-group">
+
+        <div class="field" [ngClass]="{'error': isFieldInvalid('nombreUsuario')}">
+          <label for="nombreUsuario">Nombre<span style="color: #E24C4C;">*</span></label>
+          <input type="text" pInputText id="nombreUsuario" formControlName="nombreUsuario" required />
+          <small class="p-error" *ngIf="isFieldInvalid('nombreUsuario')">
+            {{ getErrorMessage('nombreUsuario') }}
+          </small>
+
+        </div>
+
+        <div class="field" [ngClass]="{'error': isFieldInvalid('apellidoUsuario')}">
+          <label for="apellidoUsuario">Apellido<span style="color: #E24C4C;">*</span></label>
+          <input type="text" pInputText id="apellidoUsuario" formControlName="apellidoUsuario" />
+          <small class="p-error" *ngIf="isFieldInvalid('apellidoUsuario')">
+            {{ getErrorMessage('apellidoUsuario') }}
+          </small>
+        </div>
+      </div>
+
+      <div class="field" [ngClass]="{'error': isFieldInvalid('telefonoUsuario')}">
+        <label for="telefonoUsuario">Teléfono<span style="color: #E24C4C;">*</span></label>
+        <input type="text" maxlength="10" pInputText id="telefonoUsuario" formControlName="telefonoUsuario" />
+        <small class="p-error" *ngIf="isFieldInvalid('telefonoUsuario')">
+          {{ getErrorMessage('telefonoUsuario') }}
+        </small>
+      </div>
+
+      <div class="field" [ngClass]="{'error': isFieldInvalid('correoUsuario')}">
+        <label for="correoUsuario">Correo<span style="color: #E24C4C;">*</span></label>
+        <input type="email" pInputText id="correoUsuario" formControlName="correoUsuario" />
+        <small class="p-error" *ngIf="isFieldInvalid('correoUsuario')">
+          {{ getErrorMessage('correoUsuario') }}
+        </small>
+      </div>
+
+      <div class="field-group">
+        <div class="field" *ngIf="!isEditing" [ngClass]="{'error': isFieldInvalid('claveUsuario')}">
+          <label for="claveUsuario">Contraseña<span style="color: #E24C4C;">*</span></label>
+          <input type="password" pInputText id="claveUsuario" formControlName="claveUsuario" required />
+          <small class="p-error" *ngIf="isFieldInvalid('claveUsuario')">
+            {{ getErrorMessage('claveUsuario') }}
+          </small>
+        </div>
+      
+        <div class="field" *ngIf="!isEditing">
+          <label for="confirmarClave">Confirmar contraseña<span style="color: #E24C4C;">*</span></label>
+          <input type="password" pInputText id="confirmarClave" formControlName="confirmarClave" required />
+          <small class="p-error" *ngIf="isFieldInvalid('confirmarClave')">
+            Las contraseñas no coinciden
+          </small>
+        </div>
+      </div>
+
+    </form>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text custom-cancel-btn"
+      (click)="closeModal()" (click)="cancelModalMessage()"></button>
+    <button pButton pRipple [label]="isEditing ? 'Actualizar' : 'Guardar'" icon="pi pi-check"
+      class="p-button-text custom-save-btn" (click)="saveUser()"></button>
+  </ng-template>
+</p-dialog>

@@ -1,0 +1,71 @@
+.product-details-container {
+  display: flex;
+  align-items: flex-start; // Alinea los elementos al principio en el eje vertical
+  gap: 20px; // Espacio entre la imagen y la información
+
+  .image-container {
+    flex: 0 0 140px; // Tamaño fijo para la imagen
+
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px; // Bordes redondeados
+      box-shadow: 0 4px 8px #250bcf33; // Sombreado
+      height: auto;
+      object-fit: cover;
+    }
+  }
+
+  .product-info {
+    flex: 1; // Ocupa el resto del espacio disponible
+    display: flex;
+    flex-direction: column;
+    gap: 3px; // Espacio entre cada campo
+  }
+
+  .field {
+    label {
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      color: #333;
+    }
+
+    span {
+      font-weight: normal;
+      font-size: 1rem;
+      color: #5e5e5e;
+    }
+  }
+}
+
+.barcode-table {
+  margin-top: 1.5rem;
+}
+
+.barcode-table h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.barcode-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.barcode-table th,
+.barcode-table td {
+  border: 1px solid #ddd;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+.barcode-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.required {
+  color: #E24C4C;
+  margin-left: 5px;
+}

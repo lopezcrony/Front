@@ -1,0 +1,60 @@
+<a routerLink="/sales" routerLinkActive="active">
+    <i class="pi pi-angle-left" style="font-size: 1.5rem;color: gray;"></i>
+</a>
+<!-- PLANTILLA CRUD -->
+<app-crud [Module]="'Resumen de Ventas'" 
+[items]="filteredSale" 
+[columns]="colums" 
+[canDelete]="false"
+[canExport]="false"
+[PDF]="true" 
+[canEdit]="false" 
+[canCreate]="false" 
+[canCancel]="true"
+(cancel)="cancelSale($event)"
+[canSeeDetail]="true" 
+[canStatus]="true" 
+[calendar]="true"
+(calendarField1)="setStartDate($event)"
+(calendarField2)="setEndDate($event)"
+[showStateColumn]="true" 
+[statusField]="'estadoVenta'"
+(detail)="openShowModal($event)" 
+(search)="searchDetailSale($event)"
+(export)="downloadPDF()">
+</app-crud>
+
+<!-- modal para ver detalle producto inicio -->
+<p-dialog [(visible)]="detailModalVisible" [style]="{width: '500px'}" [header]="'Detalle de Venta'" [modal]="true"
+    class="p-fluid" [closable]="true">
+    <ng-template pTemplate="content">
+
+        <!-- Información del Venta -->
+        <div class="form-grid" style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+            <div class="field" style="font-weight: bold;">
+                <label for="idVenta" style="margin-right: 10px;">Venta Número</label>
+                <span>{{ selectedDetailSales?.idVenta }}</span>
+            </div>
+        </div>
+
+        <!-- Tabla de Detalles de Venta -->
+        <div class="details-table">
+            <p-table [value]="filteredDetailSale" [paginator]="true" [rows]="10">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-item>
+                    <tr>
+                        <td>{{ item.nombreProducto }}</td>
+                        <td>{{ item.cantidadProducto }}</td>
+                        <td>{{ item.subtotal | currency }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </ng-template>
+</p-dialog>

@@ -1,0 +1,6 @@
+.field.editing-mode input {
+  pointer-events: none; /* Deshabilita la interacción */
+  background-color: #e0e0e0; /* Cambia el color de fondo */
+  color: #a0a0a0; /* Cambia el color del texto */
+  cursor: not-allowed; /* Cambia el cursor */
+}

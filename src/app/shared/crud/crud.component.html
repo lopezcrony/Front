@@ -1,0 +1,196 @@
+<div class="card">
+  <div class="flex flex-wrap items-center mb-3">
+    <div class="flex items-center space-x-2 flex-grow">
+      <button *ngIf="canCreate" pButton pRipple label="Nuevo" icon="pi pi-plus"
+        class="p-button-success p-button-rounded p-button-outlined" (click)="onCreate()"></button>
+      <button *ngIf="canExport" pButton pRipple label="Descargar" icon="pi pi-download"
+        class="p-button-help p-button-rounded p-button-outlined" (click)="onExport()"></button>
+
+      <button *ngIf="PDF" pButton pRipple label="Informe" icon="pi pi-file-pdf"
+        class="p-button-primary p-button-rounded p-button-outlined" (click)="showModal()"></button>
+
+      <!-- Modal para descargar informes por rango de fechas -->
+      <p-dialog 
+  header="Descargar Informe" 
+  [(visible)]="displayModal" 
+  [modal]="true" 
+  [closable]="true"
+  [style]="{'width': '500px', 'max-width': '550px'}" 
+  styleClass="custom-date-range-modal">
+  
+  <ng-template pTemplate="content">
+    <div>
+      <div class="mb-4">
+        <p class="font-medium text-gray-700">Elige el período de tiempo para descargar el informe.</p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4 mt-2">
+        <div>
+          <label for="startDate" class="block mb-2 text-sm font-bold text-gray-700">Fecha de Inicio</label>
+          <p-calendar 
+            id="startDate" 
+            [(ngModel)]="calendarField1Value" 
+            (ngModelChange)="getDateStart($event)"
+            [iconDisplay]="'input'" 
+            [showIcon]="true" 
+            [dateFormat]="'dd/mm/yy'"
+            placeholder="DD/MM/AA" 
+            [readonlyInput]="true" 
+            [appendTo]="'body'"
+            inputStyleClass="w-full border-2 border-purple-200 rounded-lg focus:border-purple-500 transition-colors duration-300">
+          </p-calendar>
+        </div>
+        
+        <div>
+          <label for="endDate" class="block mb-2 text-sm font-bold text-gray-700">Fecha de Fin</label>
+          <p-calendar 
+            id="endDate" 
+            [(ngModel)]="calendarField2Value" 
+            (ngModelChange)="getDateEnd($event)"
+            [iconDisplay]="'input'" 
+            [showIcon]="true" 
+            [dateFormat]="'dd/mm/yy'"
+            placeholder="DD/MM/AA" 
+            [readonlyInput]="true" 
+            [appendTo]="'body'"
+            inputStyleClass="w-full border-2 border-purple-200 rounded-lg focus:border-purple-500 transition-colors duration-300">
+          </p-calendar>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-end gap-3 p-4">
+      <button pButton label="Descargar" (click)="onExportDate()" icon="pi pi-download"
+      class="p-button-help p-button-rounded p-button-outlined"
+      [disabled]="!calendarField1Value || !calendarField2Value"></button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+    </div>
+
+    <!-- Aplicar clases flex y margin auto para centrar el texto -->
+    <h3 class="title flex-grow text-center" style="margin: 0; margin-right: 200px;">{{ Module }}</h3>
+
+    <div class="relative flex items-center space-x-2 ml-auto">
+      <input pInputText type="text" [(ngModel)]="searchQuery" (input)="onSearch()" placeholder="Buscar"
+        class="search-input" />
+      <i *ngIf="searchQuery"
+        class="pi pi-times absolute top-3 right-3 transform -translate-y-1/2 cursor-pointer text-gray-500"
+        (click)="clearSearch()"></i>
+    </div>
+  </div>
+
+
+  <div class="table-container">
+    <p-table [value]="items" [tableStyle]="{'min-width': '50rem', 'margin': '0', 'text-align': 'center'}"
+      sortMode="multiple" [paginator]="true" [rows]="5" [showCurrentPageReport]="true"
+      currentPageReportTemplate="Mostrando {last} de {totalRecords} registros" [rowsPerPageOptions]="[5, 10, 25]">
+
+      <!-- Encabezado de la tabla -->
+      <ng-template pTemplate="header">
+        <tr>
+          <th *ngFor="let col of columns" [pSortableColumn]="col.field" [style]="{'text-align': 'center'}">
+            {{col.header}} <p-sortIcon [field]="col.field"></p-sortIcon>
+          </th>
+
+          <th *ngIf="showStateColumn" [style]="{'text-align': 'center'}">Estado</th>
+          <th *ngIf="creditColumn" [style]="{'text-align': 'center'}">Abonar</th>
+          <th *ngIf="creditColumn" [style]="{'text-align': 'center'}">Historial</th>
+          <th *ngIf="actions" [style]="{'text-align': 'center'}">Acciones</th>
+        </tr>
+      </ng-template>
+
+      <!-- Cuerpo de la tabla -->
+      <ng-template pTemplate="body" let-item>
+        <tr [ngClass]="{'anulado-row': item[statusField] === false}">
+
+          <td *ngFor="let col of columns"
+            [style]="{'word-wrap': 'break-word', 'white-space': 'normal', 'text-align': 'center'}">
+
+            <ng-container [ngSwitch]="col.type">
+              <!-- Para formato de fecha -->
+              <span *ngSwitchCase="'date'">{{ item[col.field] | date: 'shortDate' }}</span>
+
+              <!-- Para formato de fecha y hora-->
+              <span *ngSwitchCase="'dateTime'">{{ item[col.field] | date: 'short' }}</span>
+
+              <!-- Para formato de moneda -->
+              <span *ngSwitchCase="'currency'">{{ item[col.field] | currency }}</span>
+
+              <!-- Mostrar imagen si es tipo image -->
+              <img *ngSwitchCase="'image'" [src]="getImageUrl(item.idProducto)" alt="{{item[col.field]}}"
+                class="w-18 h-12 object-cover" />
+
+              <!-- Mostrar texto normal  -->
+              <span *ngSwitchDefault>{{ item[col.field] }}</span>
+            </ng-container>
+
+          </td>
+
+          <td *ngIf="SelectChangeStatus" [style]="{'text-align': 'center'}">
+            <div class="flex justify-center items-center">
+              <!-- Reemplazamos el botón por el select -->
+              <select [ngClass]="getSelectStatus(item) ? 'true-chip tipo-chip' : 'false-chip tipo-chip'"
+                [(ngModel)]="item[statusField]" (change)="confirmChangeStatusProvider(item)">
+                <option value="Por notificar">Por notificar</option>
+                <option value="Notificado">Notificado</option>
+                <option value="En proceso">En proceso</option>
+                <option value="Finalizado">Finalizado</option>
+              </select>
+
+            </div>
+          </td>
+          <!-- Botón para abonar (Créditos) -->
+          <td *ngIf="canInstallment" [style]="{'text-align': 'center'}">
+            <button *ngIf="canInstallment" pButton pRipple icon="pi pi-money-bill"
+              class="p-button-rounded p-button-success p-button-outlined p-button-sm mr-2"
+              (click)="onInstallment(item)"></button>
+          </td>
+
+          <!-- Botón para cambiar estado (Activo - Inactivo) -->
+          <td *ngIf="canChangeStatus" [style]="{'text-align': 'center'}">
+            <div class="flex justify-center items-center">
+              <p-button [rounded]="true" [label]="getStatus(item) ? 'Activo' : 'Inactivo'"
+                [styleClass]="getStatus(item) ? 'true-chip tipo-chip' : 'false-chip tipo-chip'"
+                (onClick)="confirmChangeStatus(item)" pTooltip="Cambiar Estado" tooltipPosition="left"></p-button>
+            </div>
+          </td>
+
+          <!-- Botón para visualizar el estado actual (Compras y Ventas) -->
+          <td *ngIf="canStatus" [style]="{'text-align': 'center'}">
+            <div class="flex justify-center items-center">
+              <p-button [rounded]="true" [label]="getStatus(item) ? 'Vigente' : 'Anulado'"
+                [styleClass]="getStatus(item) ? 'true-chip tipo-chip' : 'false-chip tipo-chip'"></p-button>
+            </div>
+          </td>
+
+
+          <td [style]="{'text-align': 'center'}">
+            <div class="flex justify-center">
+              <!-- Botón para Editar -->
+              <button *ngIf="canEdit" pButton pRipple icon="pi pi-pencil"
+                class="p-button-rounded p-button-info p-button-outlined p-button-sm mr-2" (click)="onEdit(item)"
+                pTooltip="Editar" tooltipPosition="left"></button>
+              <!-- Botón para Eliminar -->
+              <button *ngIf="canDelete" pButton pRipple icon="pi pi-trash"
+                class="p-button-rounded p-button-danger p-button-outlined p-button-sm mr-2" (click)="onDelete(item)"
+                pTooltip="Eliminar" tooltipPosition="left"></button>
+              <!-- Botón para Ver el Detalle -->
+              <button *ngIf="canSeeDetail" pButton pRipple icon="pi pi-eye"
+                class="p-button-rounded p-button-warning p-button-outlined p-button-sm mr-2" (click)="onDetail(item)"
+                pTooltip="Ver Detalle" tooltipPosition="left"></button>
+              <!-- Botón para Anular -->
+              <button *ngIf="canCancel && item[statusField] !== false" pButton pRipple icon="pi pi-times"
+                class="p-button-rounded p-button-danger p-button-outlined p-button-sm" (click)="onCancel(item)"
+                pTooltip="Anular" tooltipPosition="left"></button>
+            </div>
+          </td>
+
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

@@ -1,0 +1,163 @@
+@import "primeicons/primeicons.css";
+
+.container-crud {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.create-button {
+  background-color: #4299e1;
+  color: white;
+  padding: 7px 16px;
+  border: none;
+  border-radius: 4px;
+  margin-right: auto;
+}
+
+.right-side {
+  display: flex;
+  align-items: center;
+}
+
+.search-field {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+  width: 200px;
+  margin-right: 8px;
+}
+
+.status-filter {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+}
+
+.colunms {
+  background-color: rgb(241, 239, 239);
+}
+
+/* Estilos globales o de componente */
+.uniform-button {
+  width: 100px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.field-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.field {
+  flex: 1;
+  margin-right: 1rem;
+  margin-top: 7px;
+}
+
+.field:last-child {
+  margin-right: 0;
+}
+
+.p-inputtext {
+  border: 1px solid #ccc !important;
+  padding: 8px !important;
+}
+
+.image-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image-cell img {
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-width: 100px;
+  height: auto;
+  object-fit: cover;
+}
+
+/* TABLA RESPONSIVA */
+
+.table-container {
+  overflow-x: auto; /* Habilita el desplazamiento horizontal si la tabla es demasiado ancha */
+  -webkit-overflow-scrolling: touch; /* Habilita el desplazamiento suave en dispositivos táctiles */
+}
+
+/* Opcional: Asegúrate de que la tabla ocupe el 100% del ancho del contenedor */
+.table-container table {
+  width: 100%;
+  border-collapse: collapse; /* Asegura que las celdas se colapsen correctamente */
+}
+
+.p-table td, .p-table th {
+  word-wrap: break-word; /* Rompe el texto largo para evitar desbordamiento */
+  white-space: nowrap; /* Impide que el texto se ajuste automáticamente a múltiples líneas */
+}
+
+/* HEADER RESPONSIVE */
+.search-input {
+  max-width: 200px; /* Ajusta el ancho máximo del campo de búsqueda */
+  width: 100%; /* Hace que el input ocupe el 100% del contenedor disponible */
+  padding: 8px;
+  box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
+}
+
+@media (max-width: 768px) {
+  .search-input {
+    max-width: 100px; /* Reduce el ancho máximo en pantallas pequeñas */
+  }
+
+  .flex-wrap {
+    flex-direction: row; /* Alinea los elementos en una fila en pantallas pequeñas */
+    align-items: center; /* Alinea los elementos verticalmente en el centro */
+  }
+
+  .flex-grow {
+    flex: 1; /* Hace que el contenedor crezca para ocupar el espacio disponible */
+  }
+}
+
+.anulado-row {
+  background-color: rgba(108, 117, 125, 0.15);
+  color: #6c757d;
+}
+
+/* -----------------Modal para la descarga de informes -------------------------------- */
+
+/* Contenedor para los campos */
+.calendar-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Campo de calendario alineado debajo del título */
+.calendar-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Evitar que el calendario se abra automáticamente */
+.p-dialog .p-calendar .p-inputtext:focus {
+  outline: none;
+}
+
+.p-calendar-overlay {
+  display: none !important;
+}
+
+.p-calendar .p-inputtext:hover + .p-calendar-overlay {
+  display: block !important;
+}
+
+
+
+

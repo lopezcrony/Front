@@ -1,0 +1,68 @@
+.shopping-form {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.details-container {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1rem;
+}
+
+.details-row {
+    display: contents;
+}
+
+.details-row .form-group {
+    margin-bottom: 0;
+}
+
+button.p-button {
+    margin-top: 10px;
+}
+
+p-dropdown {
+    width: 100%;
+}
+
+input[pInputText],
+p-calendar {
+    width: 100%;
+}
+
+.p-button-danger {
+    background-color: #f44336;
+    border: none;
+}
+
+.p-button-secondary {
+    background-color: #007bff;
+    border: none;
+}
+
+.p-button-success {
+    background-color: #4caf50;
+    border: none;
+}
+
+.divider {
+    height: 4px;
+    /* Más grosor */
+    background-color: #ccc;
+    /* Color de la línea */
+    margin: 40px 0;
+    /* Más espacio arriba y abajo */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    /* Sombreado suave */
+    border-radius: 2px;
+    /* Esquinas redondeadas para suavizar la línea */
+}
+
+.required {
+    color: #E24C4C;
+    margin-left: 5px;
+}

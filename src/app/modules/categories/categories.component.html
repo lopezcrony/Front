@@ -1,0 +1,53 @@
+<!-- PLANTILLA CRUD -->
+<app-crud [Module]="'Categorías de Productos'" [items]="filteredCategories" [columns]="columns" [canDelete]="true"
+    [canExport]="false" [canSeeDetail]="false" [canChangeStatus]="true" [showStateColumn]="true"
+    [statusField]="'estadoCategoria'" (statusChange)="changeCategorieStatus($event)" (create)="openCreateModal()"
+    (export)="exportCategorie()" (edit)="openEditModal($event)" (delete)="confirmDelete($event)"
+    (search)="searchCategorie($event)">
+</app-crud>
+
+<!-- FORMULARIOS -->
+<p-dialog [(visible)]="showModal" [style]="{width: '450px'}"
+    [header]="isEditing ? 'Editar Categoría' : 'Crear Categoría'" [modal]="true" class="p-fluid" appCrudModal
+    [isEditing]="isEditing" (save)="saveCategorie()" (cancel)="closeModal()">
+    <ng-template pTemplate="content">
+        <form [formGroup]="categorieForm">
+            <!-- pa mostrar los campos al frenta -->
+            <div class="field-group">
+                <div class="field" [ngClass]="{'error': isFieldInvalid('nombreCategoria')}">
+                    <label for="nombreCategoria">
+                        Nombre Categoría
+                        <span *ngIf="isFieldEmpty('nombreCategoria')" class="required">*</span>
+                    </label>
+                    <input type="text" pInputText id="nombreCategoria" formControlName="nombreCategoria"
+                        maxlength="20" />
+                    <!-- Mensaje de error -->
+                    <small class="p-error" *ngIf="isFieldInvalid('nombreCategoria')">
+                        {{ getErrorMessage('nombreCategoria') }}
+                    </small>
+                </div>
+
+                <div class="field" [ngClass]="{'error': isFieldInvalid('descripcionCategoria')}">
+                    <label for="descripcionCategoria">
+                        Descripción
+                    </label>
+                    <input type="text" pInputText id="descripcionCategoria" formControlName="descripcionCategoria"
+                        maxlength="100" />
+                    <!-- Mensaje de error -->
+                    <small class="p-error" *ngIf="isFieldInvalid('descripcionCategoria')">
+                        {{ getErrorMessage('descripcionCategoria') }}
+                    </small>
+                </div>
+
+
+
+            </div>
+        </form>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text custom-cancel-btn"
+            (click)="closeModal()" (click)="cancelModalMessage()"></button>
+        <button pButton pRipple [label]="isEditing ? 'Actualizar' : 'Guardar'" icon="pi pi-check"
+            class="p-button-text custom-save-btn" (click)="saveCategorie()"></button>
+    </ng-template>
+</p-dialog>

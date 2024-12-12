@@ -1,0 +1,111 @@
+<!-- PLANTILLA CRUD -->
+<app-crud [Module]="'Clientes'" [items]="filteredClients" [columns]="columns" [canDelete]="false" [canExport]="false" [canSeeDetail]="true"
+  [canChangeStatus]="true" [showStateColumn]="true" [statusField]="'estadoCliente'" (create)="openCreateModal()" (edit)="openEditModal($event)" (detail)="openHistoryModal($event)"
+  (search)="searchClients($event)" (statusChange)="changeClientStatus($event)">
+</app-crud>
+
+<!-- FORMULARIOS -->
+
+<p-dialog [(visible)]="showModal" [style]="{width: '450px'}" [header]="isEditing ? 'Editar Cliente' : 'Crear Cliente'"
+  [modal]="true" class="p-fluid" appCrudModal [isEditing]="isEditing" (save)="saveClient()" (cancel)="closeModal()">
+  <ng-template pTemplate="content">
+    <form [formGroup]="clientForm">
+
+      <div class="field" [ngClass]="{'error': isFieldInvalid('cedulaCliente')}">
+        <label for="cedulaCliente">Cédula <span style="color: #E24C4C;">*</span></label>
+        <input type="text" pInputText id="cedulaCliente" formControlName="cedulaCliente" maxlength="15" autofocus />
+        <small class="p-error" *ngIf="isFieldInvalid('cedulaCliente')">
+          {{ getErrorMessage('cedulaCliente') }}
+        </small>
+      </div>
+
+      <div class="field-group">
+        <div class="field" [ngClass]="{'error': isFieldInvalid('nombreCliente')}">
+          <label for="nombreCliente">Nombre <span style="color: #E24C4C;">*</span></label>
+          <input type="text" pInputText id="nombreCliente" formControlName="nombreCliente" />
+          <small class="p-error" *ngIf="isFieldInvalid('nombreCliente')">
+            {{ getErrorMessage('nombreCliente') }}
+          </small>
+        </div>
+
+        <div class="field" [ngClass]="{'error': isFieldInvalid('apellidoCliente')}">
+          <label for="apellidoCliente">Apellido <span style="color: #E24C4C;">*</span></label>
+          <input type="text" pInputText id="apellidoCliente" formControlName="apellidoCliente" />
+          <small class="p-error" *ngIf="isFieldInvalid('apellidoCliente')">
+            {{ getErrorMessage('apellidoCliente') }}
+          </small>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field" [ngClass]="{'error': isFieldInvalid('direccionCliente')}">
+          <label for="direccionCliente">Dirección <span style="color: #E24C4C;">*</span></label>
+          <input type="text" pInputText id="direccionCliente" formControlName="direccionCliente" />
+          <small class="p-error" *ngIf="isFieldInvalid('direccionCliente')">
+            {{ getErrorMessage('direccionCliente') }}
+          </small>
+        </div>
+
+        <div class="field" [ngClass]="{'error': isFieldInvalid('telefonoCliente')}">
+          <label for="telefonoCliente">Teléfono <span style="color: #E24C4C;">*</span></label>
+          <input type="text" pInputText id="telefonoCliente" formControlName="telefonoCliente" minlength="7"
+            maxlength="10" />
+          <small class="p-error" *ngIf="isFieldInvalid('telefonoCliente')">
+            {{ getErrorMessage('telefonoCliente') }}
+          </small>
+        </div>
+      </div>
+    </form>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text custom-cancel-btn"
+      (click)="closeModal()" (click)="cancelModalMessage()" aria-label="Cancelar"></button>
+    <button pButton pRipple [label]="isEditing ? 'Actualizar' : 'Guardar'" icon="pi pi-check"
+      class="p-button-text custom-save-btn" (click)="saveClient()" aria-label="Guardar"></button>
+  </ng-template>
+</p-dialog>
+
+<!-- HISTORIAL DE CRÉDITO -->
+
+<p-dialog [(visible)]="showHistoryModal" [style]="{width: '80vw'}" [modal]="true" [header]="'Historial de Crédito'" class="p-fluid">
+  <ng-template pTemplate="content">
+    <p-table [value]="historyItems" [paginator]="true" [rows]="10" [first]="currentPageIndex" (onPage)="updatePageIndex($event)">
+      <ng-template pTemplate="header">
+        <tr>
+          <th class="text-center" style="width: 15%;">Fecha</th>
+          <th class="text-center" style="width: 15%;">Tipo</th>
+          <th class="text-center" style="width: 15%;">Monto</th>
+          <th class="text-center" style="width: 15%;">Saldo</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-item>
+        <tr [ngClass]="{'anulado-row': item.tipo === 'Abono' && item.estadoAbono === false}">
+          <td class="text-center">{{item.fecha | date:'short'}}</td>
+          <td class="text-center">
+            <span [ngClass]="{
+              'abono-chip': item.tipo === 'Abono', 
+              'cargo-chip': item.tipo === 'Abono' && item.estadoAbono === false,
+              'credito-chip': item.tipo === 'Crédito'
+            }" class="tipo-chip">
+              {{item.tipo}}
+            </span>
+          </td>
+          <td class="text-center">{{item.monto | currency}}</td>
+          <td class="text-center">{{item.saldo | currency}}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <div class="modal-footer">
+      <button pButton pRipple 
+              label="Descargar Historial" 
+              icon="pi pi-download"
+              class="p-button-help p-button-rounded p-button-outlined" 
+              (click)="downloadCreditHistory()">
+      </button>
+    </div>
+  </ng-template>
+</p-dialog>

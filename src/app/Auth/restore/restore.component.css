@@ -1,0 +1,128 @@
+/* Fondo */
+.min-h-screen {
+  display: block;
+  min-height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  padding: 0;
+
+  background: linear-gradient(135deg, #3887BE 0%, #5AA6D8 35%, #89C5E8 70%, #B7E1F7 100%);
+  background-size: 300% 300%;
+  animation: gradientAnimation 8s ease-in-out infinite alternate;
+
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0
+}
+
+/* Efecto de brillo sutil en el fondo */
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 0%;
+  }
+  25% {
+    background-position: 100% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  75% {
+    background-position: 0% 100%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
+
+/* Tarjeta */
+.tarjeta {
+  margin: 0;
+  width: 100%;
+  max-width: 500px;
+  padding: 14.2px;
+}
+
+.bg-white {
+  border-radius: 15px;
+  padding: 50px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Encabezado */
+.text-center h2 {
+  font-size: 1.5rem;
+  color: #1a202c;
+  margin-bottom: 10px;
+  white-space: nowrap;
+}
+
+.text-gray-600 {
+  color: #718096;
+}
+
+/* Inputs */
+input {
+  background: transparent;
+  padding: 12px;
+  width: 100%;
+  border: none;
+  font-size: 1rem;
+  color: #4a5568;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+/* Quitar el ojo nativo del input de contraseña */
+.input-password::-ms-reveal,
+.input-password::-ms-clear,
+.input-password::-webkit-reveal,
+.input-password::-webkit-clear-button {
+  display: none !important;
+}
+
+/* Bordes visibles */
+.flex {
+  display: flex;
+  align-items: center;
+  border: 1px solid #cbd5e0;
+  border-radius: 8px;
+  padding: 5px;
+}
+
+input:focus {
+  outline: none;
+}
+
+/* Iconos */
+i {
+  font-size: 1.25rem;
+  color: #6b7280;
+}
+
+/* Icono del escudo */
+.icono-escudo {
+  color: white;
+  font-size: 2rem;
+}
+
+/* Botón de restablecer */
+button {
+  background-color: #3B82F6;
+  color: white;
+  padding: 12px;
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+button:hover {
+  background-color: #3B82F6;
+  transform: scale(1.05);
+}

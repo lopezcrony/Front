@@ -1,0 +1,103 @@
+/* PrimeNG */
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.min.css";
+
+/* Bootstrap Icons */
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+
+/* PrimeIcons */
+@import "primeicons/primeicons.css";
+
+/* Toastr */
+@import 'ngx-toastr/toastr';
+
+/* TailwindCSS */
+@tailwind components;
+@tailwind utilities;
+
+/* Estilos globales */
+body {
+  background-color: #f4f4f4;
+}
+
+.field-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.field {
+  flex: 1;
+  margin-top: 10px;
+}
+
+.field:last-child {
+  margin-right: 0;
+}
+
+.p-inputtext {
+  margin-top: 5px;
+  padding: 8px !important;
+}
+
+/* ALERTAS */
+.toast-success {
+  background-color: #16a34ab6 !important;
+  color: #fff !important;
+}
+
+.toast-error {
+  background-color: #cf3e33f5 !important;
+  color: #fff !important;
+}
+
+.toast-info {
+  background-color: #167ab4b7 !important;
+  color: #e0f7fa !important;
+}
+
+.toast-title {
+  font-weight: bold;
+}
+
+.toast-message {
+  font-size: 14px;
+}
+
+/* MODAL FORM */
+
+/* Botón Cancelar */
+/* .custom-cancel-btn {
+  color: rgba(129, 128, 128, 0.856)
+} */
+
+/* Botón de Guardar o Actualizar */
+.custom-save-btn {
+  color: rgb(56, 194, 56);
+}
+
+/* Botón de cambiar estado */
+.tipo-chip {
+  @apply text-sm rounded-full flex items-center justify-center !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.true-chip {
+  @apply bg-green-100 text-green-800 w-24 h-10 border-green-200 !important;
+}
+
+.false-chip {
+  @apply bg-red-100 text-red-800 w-24 h-10 border-red-200 !important;
+}
+
+/* Tamaño del botón */
+.p-button.p-button-sm {
+  font-size: 0.1rem;
+  padding: 0.1rem;
+}
+
+/* Tamaño del icono del botón */
+.p-button.p-button-sm .p-button-icon {
+  font-size: 1rem;
+}

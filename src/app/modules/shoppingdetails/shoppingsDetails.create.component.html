@@ -1,0 +1,131 @@
+<a routerLink="/shoppingview" routerLinkActive="active">
+    <i class="pi pi-angle-left" style="font-size: 1.5rem;color: gray;"></i>
+</a>
+<h2 class="title" style="text-align: center;">Crear Compras</h2>
+
+<form [formGroup]="shoppingForm" (ngSubmit)="saveShopping()" class="shopping-form">
+    <!-- Formulario de Compra (Shoppings) -->
+    <div formGroupName="shopping">
+        <div class="field-group">
+            
+            <div class="field" [ngClass]="{'error': isFieldInvalid('idProveedor')}">
+                <label for="proveedor">Proveedor
+                    <span *ngIf="isFieldEmpty('idProveedor')" class="required">*</span>
+                </label>
+                <div class="p-inputgroup">
+                    <p-dropdown [options]="providers" formControlName="idProveedor" optionLabel="nombreProveedor"
+                        optionValue="idProveedor" placeholder="Seleccionar proveedor" [virtualScroll]="false"
+                        [virtualScrollItemSize]="38" styleClass="w-full">
+                    </p-dropdown>
+                </div>
+                <small class="p-error" *ngIf="isFieldInvalid('idProveedor')">
+                    {{ getErrorMessage('idProveedor') }}
+                </small>
+            </div>
+
+            <!-- <div class="field" [ngClass]="{'error': isFieldInvalid('fechaCompra')}">
+                <label for="fechaCompra">Fecha Compra <span style="color: #E24C4C;">*</span></label>
+                <input type="date" pInputText id="fechaCompra" formControlName="fechaCompra" required autofocus />
+                <small class="p-error" *ngIf="shoppingForm.get('fechaCompra')?.hasError('fechaPosterior')">
+                    La fecha no puede ser posterior a la actual.
+                </small>
+                
+            </div> -->
+
+            <div class="field" [ngClass]="{'error': isFieldInvalid('fechaCompra')}">
+                <label for="fechaCompra" class="p-d-block">
+                    Fecha Compra 
+                    <span *ngIf="isFieldEmpty('fechaCompra')" class="required">*</span>
+                </label>
+                <input type="date" id="fechaCompra" formControlName="fechaCompra" class="p-inputtext p-d-block"
+                    style="width: 100%; height: 2.6rem;" required autofocus />
+                <small class="p-error" *ngIf="shoppingForm.get('fechaCompra')?.hasError('fechaPosterior')">
+                    La fecha no puede ser posterior a la actual.
+                </small>
+            </div>
+
+        </div>
+
+        <div class="field-group mb-5">
+            <div class="field" [ngClass]="{'error': isFieldInvalid( 'numeroFactura')}">
+                <label for="numeroFactura">Número Factura 
+                    <span *ngIf="isFieldEmpty('numeroFactura')" class="required">*</span>
+                </label>
+                <input type="text" pInputText id="numeroFactura" formControlName="numeroFactura" required autofocus />
+                <small class="p-error" *ngIf="isFieldInvalid( 'numeroFactura')">
+                    {{ getErrorMessage( 'numeroFactura') }}
+                </small>
+            </div>
+
+            <!-- <div class="field">
+                <label for="valorCompra">Valor Compra</label>
+                <input type="number" pInputText id="valorCompra" formControlName="valorCompra" readonly />
+            </div> -->
+            <div class="field">
+                <label>Valor Compra:</label>
+                <input type="text" formControlName="valorCompra" pInputText readonly>
+            </div>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Formulario de Detalles de Compra (ShoppingDetails) -->
+    <div formArrayName="shoppingDetail" class="details-container">
+        <div *ngFor="let detail of shoppingDetailArray.controls; let i = index" [formGroupName]="i" class="details-row">
+            <div class="field" [ngClass]="{'error': isFieldInvalid('idProducto')}">
+                <label for="producto">Producto <span style="color: #E24C4C;">*</span></label>
+                <div class="p-inputgroup">
+                    <p-autoComplete formControlName="idProducto" [suggestions]="filteredProducts"
+                        (completeMethod)="searchProduct($event)" field="nombreProducto" placeholder="Buscar"
+                        [forceSelection]="true" styleClass="w-full">
+                    </p-autoComplete>
+                </div>
+                <small class="p-error" *ngIf="isFieldInvalid('idProducto')">
+                    {{ getErrorMessage('idProducto') }}
+                </small>
+            </div>
+            <div class="field" [ngClass]="{'error': isFieldInvalid('codigoBarra')}">
+                <label for="codigoBarra">Código de Barra <span style="color: #E24C4C;">*</span></label>
+                <input type="text" formControlName="codigoBarra"
+                    (input)="validateNumberCodeBarInput($event, 'codigoBarra')" pInputText>
+                <small class="p-error" *ngIf="isFieldInvalid('codigoBarra')">
+                    {{ getErrorMessage('codigoBarra') }}
+                </small>
+            </div>
+            <div class="field" [ngClass]="{'error': isFieldInvalid('cantidadProducto')}">
+                <label for="cantidadProducto">Cantidad <span style="color: #E24C4C;">*</span></label>
+                <input type="number" formControlName="cantidadProducto"
+                    (input)="validateNumberInput($event, 'cantidadProducto'); calculateSubtotal(i)" pInputText>
+                <small class="p-error" *ngIf="isFieldInvalid('cantidadProducto')">
+                    {{ getErrorMessage('cantidadProducto') }}
+                </small>
+            </div>
+            <div class="field" [ngClass]="{'error': isFieldInvalid('precioCompraUnidad')}">
+                <label for="precioCompraUnidad">Precio x Unidad <span style="color: #E24C4C;">*</span></label>
+                <input type="number" formControlName="precioCompraUnidad"
+                    (input)="validateNumberInput($event, 'precioCompraUnidad'); calculateSubtotal(i)" pInputText>
+                <small class="p-error" *ngIf="isFieldInvalid('precioCompraUnidad')">
+                    {{ getErrorMessage('precioCompraUnidad') }}
+                </small>
+            </div>
+            <div class="field">
+                <label>Subtotal:</label>
+                <input type="text" formControlName="subtotal" pInputText readonly>
+            </div>
+            <div class="field">
+                <button type="button" (click)="addShoppingDetail()" class="p-button p-button-secondary mr-3"
+                    pTooltip="Agregar producto">
+                    <i class="pi pi-plus"></i>
+                </button>
+                <!-- Agregar la condición aquí para mostrar el botón de eliminar solo si hay más de un detalle -->
+                <button type="button" *ngIf="shoppingDetailArray.length > 1" (click)="removeShoppingDetail(i)"
+                    class="p-button p-button-danger mt-5" pTooltip="Eliminar producto">
+                    <i class="pi pi-trash"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="p-button p-button-success mt-3">Guardar Compra</button>
+</form>

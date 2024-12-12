@@ -1,0 +1,100 @@
+<!-- PLANTILLA CRUD -->
+<app-crud 
+  [Module]="'Créditos'"
+  [items]="filteredCredits" 
+  [columns]="columns" 
+  [canEdit]="false" 
+  [canExport]="false" 
+  [canCreate]="false" 
+  [canDelete]="false" 
+  [canSeeDetail]="true" 
+  [canInstallment]="true" 
+  [canChangeStatus]="false" 
+  [showStateColumn]="false" 
+  [creditColumn]="true" 
+  [actions]="false" 
+  (installment)="openModal($event)" 
+  (detail)="openHistoryModal($event)"
+  (search)="searchCredits($event)">
+</app-crud>
+
+<!-- FORMULARIO PARA ABONAR -->
+
+<p-dialog [(visible)]="showModal" [style]="{width: '450px'}" [modal]="true" class="p-fluid" appCrudModal
+  (onHide)="closeModal()">
+  <ng-template pTemplate="header">
+    Registrar Abono
+  </ng-template>
+  <ng-template pTemplate="content">
+    <form [formGroup]="installmentForm">
+      <div class="field">
+        <label for="totalCredito">Deuda actual</label>
+        <p-inputNumber id="totalCredito" formControlName="totalCredito" mode="currency" currency="USD" locale="en-US" [disabled]="true"></p-inputNumber>
+      </div>
+      <div class="field">
+        <label for="montoAbonado">Monto a abonar</label>
+        <p-inputNumber id="montoAbonado" formControlName="montoAbonado" mode="decimal" currency="USD" locale="en-US" [min]="50"></p-inputNumber>
+        <small class="p-error" *ngIf="isFieldInvalid('montoAbonado')">
+          {{ getErrorMessage('montoAbonado') }}
+        </small>
+      </div>
+    </form>
+  </ng-template>
+  
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text custom-cancel-btn" (click)="cancelModalMessage()"></button>
+    <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text custom-save-btn" (click)="saveInstallment()" [disabled]="installmentForm.invalid"></button>
+  </ng-template>
+</p-dialog>
+
+<!-- MODAL PARA VER EL HISTORIAL DE CRÉDITO DEL USUARIO -->
+
+<p-dialog [(visible)]="showHistoryModal" [style]="{width: '80vw'}" [header]="'Historial de Crédito'" [modal]="true" [resizable]="false" [draggable]="false">
+
+  <ng-template pTemplate="content">
+    <p-table [value]="historyItems" [paginator]="true" [rows]="10">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Fecha</th>
+          <th>Tipo</th>
+          <!-- <th>Fecha Pago</th> -->
+          <th>Estado</th>
+          <th>Monto</th>
+          <th>Saldo</th>
+          <th>Acciones</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-item>
+        <tr [ngClass]="{'anulado-row': item.tipo === 'Abono' && item.estadoAbono === false}">
+          <td>{{item.fecha | date:'short'}}</td>
+          <td>
+            <span [ngClass]="{
+              'abono-chip': item.tipo === 'Abono', 
+              'cargo-chip': item.tipo === 'Abono' && item.estadoAbono === false,
+              'credito-chip': item.tipo === 'Crédito'
+            }" class="tipo-chip">
+              {{item.tipo}}
+            </span>
+          </td>
+          <!-- <td>{{item.plazoMaximo | date:'short'}}</td> -->
+          <td>
+            <ng-container *ngIf="item.tipo === 'Abono'">
+              {{item.estadoAbono ? 'Activo' : 'Anulado'}}
+            </ng-container>
+          </td>
+          <td>{{item.monto | currency}}</td>
+          <td>{{item.saldo | currency}}</td>
+          <td>
+            <button *ngIf="item.tipo === 'Abono' && item.estadoAbono !== false" 
+                    pButton pRipple icon="pi pi-times" 
+                    class="p-button-rounded p-button-danger p-button-outlined p-button-sm" 
+                    (click)="confirmCancelInstallment(item)"
+                    pTooltip="Anular Abono"
+                    tooltipPosition="left">
+            </button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </ng-template>
+</p-dialog>

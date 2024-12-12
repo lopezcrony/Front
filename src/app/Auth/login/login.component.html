@@ -1,0 +1,44 @@
+<div class="login-container">
+
+  <app-login-loading *ngIf="isLoading"></app-login-loading>
+
+  <!-- Lado derecho con el formulario -->
+  <div class="login-card" *ngIf="!isLoading">
+    <div class="logo-container animated-logo">
+      <i class="fas fa-shopping-bag logo-icon"></i>
+    </div>
+
+    <h1 class="title">ComerciPlus</h1>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="input-group">
+        <div class="input-container">
+          <i class="pi pi-envelope input-icon"></i>
+          <input type="email" class="form-control" formControlName="correoUsuario" placeholder="Correo electrónico">
+        </div>
+        <div class="error-message" *ngIf="isFieldInvalid('correoUsuario')">
+          {{ getErrorMessage('correoUsuario') }}
+        </div>
+      </div>
+
+      <div class="input-group">
+        <div class="input-container">
+          <i class="pi pi-key input-icon"></i>
+          <input [type]="showPassword ? 'text' : 'password'" class="form-control" formControlName="claveUsuario"
+            placeholder="Contraseña">
+        </div>
+        <div class="error-message" *ngIf="isFieldInvalid('claveUsuario')">
+          {{ getErrorMessage('claveUsuario') }}
+        </div>
+      </div>
+
+      <button type="submit" class="submit-button" [disabled]="loginForm.invalid">
+        <span>Iniciar Sesión</span>
+      </button>
+
+      <div class="forgot-password">
+        <a href="../recover">¿Olvidaste tu contraseña?</a>
+      </div>
+    </form>
+  </div>
+</div>

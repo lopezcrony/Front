@@ -1,0 +1,9 @@
+<div class="layout">
+  <app-topbar (toggleSidebar)="toggleSidebar()"></app-topbar>
+  <app-sidebar [isSidebarVisible]="isSidebarVisible" (sidebarClosed)="closeSidebar()"></app-sidebar>
+  <div class="overlay" *ngIf="isSidebarVisible && isMobile" (click)="closeSidebar()"></div>
+  <div class="flex-1 p-4 bg-gray-100">
+    <app-content [isSidebarVisible]="isSidebarVisible"></app-content>
+    <p-confirmDialog></p-confirmDialog>
+  </div>
+</div>

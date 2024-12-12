@@ -1,0 +1,56 @@
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes scaleIn{from{transform:scale(0)}to{transform:scale(1)}}
+@keyframes bounce{0%,20%,50%,80%,100%{transform:translateY(0)}40%{transform:translateY(-15px)}60%{transform:translateY(-10px)}}
+@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+
+/* Efecto de brillo sutil en el fondo (opcional) */
+@keyframes gradientAnimation {
+    0% {
+      background-position: 0% 0%;
+    }
+    25% {
+      background-position: 100% 0%;
+    }
+    50% {
+      background-position: 100% 100%;
+    }
+    75% {
+      background-position: 0% 100%;
+    }
+    100% {
+      background-position: 0% 0%;
+    }
+  }
+
+:host{display:block;min-height:100vh;width:100vw;margin:0;padding:0;
+
+    background: linear-gradient(135deg,#3887BE 0%, #5AA6D8 35%, #89C5E8 70%, #B7E1F7 100%);
+    background-size: 300% 300%;
+    animation: gradientAnimation 8s ease-in-out infinite alternate;
+
+    font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;overflow:hidden;position:fixed;top:0;left:0;right:0;bottom:0}
+    
+:host ::ng-deep *{margin:0;padding:0;box-sizing:border-box}
+
+.login-container{min-height:97vh;width:100%;display:flex;align-items:center;justify-content:center;padding:24px;animation:fadeIn 1.5s ease-in-out}
+
+.login-card{flex:1;max-width:440px;padding:32px;background:rgba(255,255,255,0.9);border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,0.1);animation:slideIn 0.7s ease-in-out}
+
+.logo-container{width:100px;height:100px;margin:0 auto 24px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 5px 15px rgba(33,150,243,0.2);animation:scaleIn 1.2s ease-out}
+.animated-logo{animation:bounce 2s infinite}
+.logo-icon{font-size:50px;color:#2196F3}
+.title{text-align:center;margin-bottom:30px;background:linear-gradient(45deg,#42A5F5,#1976D2);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-size:30px;font-weight:bold;letter-spacing:1px}
+
+.input-group{margin-bottom:16px}
+.form-control{width:100%;padding:12px 16px 12px 48px;border:1px solid #E0E0E0;border-radius:12px;background:#FFFFFF;transition:all 0.3s;font-size:16px}
+.form-control:focus{border-color:#2196F3;box-shadow:0 0 0 2px rgba(33,150,243,0.2);background:white;outline:none}
+.input-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:#989fa5}
+.input-container{position:relative}
+.password-toggle{position:absolute;right:16px;top:50%;transform:translateY(-50%);color:#757575;cursor:pointer;background:none;border:none;padding:0}
+.submit-button{width:100%;padding:12px;background:#2196F3;color:white;border:none;border-radius:12px;font-size:16px;font-weight:bold;letter-spacing:1px;cursor:pointer;transition:all 0.3s;box-shadow:0 4px 12px rgba(33,150,243,0.3)}
+.submit-button:hover{background:linear-gradient(45deg,#1976D2,#42A5F5);transform:translateY(-2px);box-shadow:0 6px 16px rgba(33,150,243,0.4)}
+.submit-button:disabled{background:#BDBDBD;cursor:not-allowed;transform:none;box-shadow:none}
+.forgot-password{text-align:center;margin-top:16px}
+.forgot-password a{color:#2196F3;text-decoration:none;font-weight:500;transition:color 0.3s}
+.forgot-password a:hover{color:#1976D2}
+.error-message{color:#EF5350;font-size:14px;margin-top:4px}

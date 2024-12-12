@@ -1,0 +1,75 @@
+<app-crud
+  [Module]="'Roles'"
+  [items]="filteredRoles"
+  [columns]="columns"
+  [canDelete]="true"
+  [canExport]="false"
+  [canSeeDetail]="false"
+  [canChangeStatus]="true"
+  [showStateColumn]="true"
+  [statusField]="'estadoRol'"
+  (create)="openCreateModal()"
+  (export)="exportRoles()"
+  (edit)="openEditModal($event)"
+  (delete)="confirmDelete($event)"
+  (search)="searchRoles($event)"
+  (statusChange)="changeRoleStatus($event)">
+</app-crud>
+
+<p-dialog [(visible)]="showModal" [style]="{width: '800px'}" [header]="isEditing ? 'Editar Rol' : 'Crear Rol'"
+  [modal]="true" class="p-fluid" appCrudModal [isEditing]="isEditing" (save)="saveRole()" (cancel)="closeModal()">
+  
+  <form [formGroup]="rolesForm" class="role-form">
+    <div class="field mb-4" [ngClass]="{'error': isFieldInvalid('nombreRol')}">
+      <label for="nombreRol">Nombre del Nuevo Rol<span style="color: #E24C4C;">*</span></label>
+      <input type="text" pInputText id="nombreRol" formControlName="nombreRol" autofocus />
+      <small class="p-error" *ngIf="isFieldInvalid('nombreRol')">
+          {{ getErrorMessage('nombreRol') }}
+      </small>
+    </div>
+
+    <div class="field mb-4">
+      <p-checkbox
+        [binary]="true" [(ngModel)]="selectAll" (onChange)="toggleAllPermissions($event)"
+        [ngModelOptions]="{standalone: true}" label="Seleccionar todos">
+      </p-checkbox>
+    </div>
+
+    <div class="permissions-grid" formArrayName="permissions">
+      <div class="permission-card" *ngFor="let group of permissionGroups">
+        <div class="card-header">
+          <div class="module-title">
+            <i [class]="group.icon"></i>
+            <span>{{group.modulo}}</span>
+          </div>
+          <p-checkbox
+            [binary]="true"
+            [(ngModel)]="group.checked"
+            (onChange)="toggleGroupPermissions(group)"
+            [ngModelOptions]="{standalone: true}"
+            [inputId]="'group-' + group.modulo">
+          </p-checkbox>
+        </div>
+      
+        <div class="permissions-list">
+          <div *ngFor="let permission of group.permisos" class="permission-item">
+            <p-checkbox
+              [formControlName]="findPermissionIndex(permission)"
+              [label]="permission.nombrePermiso"
+              [binary]="true"
+              [inputId]="'permission-' + permission.idPermiso"
+              (onChange)="onPermissionChange(group)">
+            </p-checkbox>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text custom-cancel-btn"
+        (click)="closeModal()" (click)="cancelModalMessage()"></button>
+    <button pButton pRipple [label]="isEditing ? 'Actualizar' : 'Guardar'" icon="pi pi-check"
+        class="p-button-text custom-save-btn" (click)="saveRole()"></button>
+</ng-template>
+</p-dialog>

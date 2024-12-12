@@ -1,0 +1,50 @@
+<!-- PLANTILLA CRUD -->
+<app-crud [Module]="'Registro de Pérdidas'" [items]="filteredLoss" [columns]="colums" [canDelete]="false"
+  [canExport]="false" [canEdit]="false" [actions]="false" [canSeeDetail]="false" (create)="openCreateModal()"
+  (search)="searchLoss($event)">
+</app-crud>
+
+<!-- FORMULARIOS -->
+
+<p-dialog [(visible)]="showModal" [style]="{width: '450px'}"
+  [header]="isEditing ? 'Editar Cliente' : 'Registrar Pérdida'" [modal]="true" class="p-fluid" appCrudModal
+  [isEditing]="isEditing" (save)="saveLoss()" (cancel)="closeModal()">
+  <ng-template pTemplate="content">
+    <form [formGroup]="LossForm">
+
+      <div class="field-group">
+        <div class="field" [ngClass]="{'error': isFieldInvalid('CodigoProducto')}">
+          <label for="CodigoProducto">Codigo Barra<span style="color: #E24C4C;">*</span></label>
+          <input type="text" formControlName="CodigoProducto" class="form-control" (focus)="startListeningToScanner()" 
+          (blur)="stopListeningToScanner()" pInputText id="CodigoProducto" required />
+
+          <small class="p-error" *ngIf="isFieldInvalid('CodigoProducto')">
+            {{ getErrorMessage('CodigoProducto') }}
+          </small>
+        </div>
+
+        <div class="field" [ngClass]="{'error': isFieldInvalid('cantidad')}">
+          <label for="cantidad">cantidad<span style="color: #E24C4C;">*</span></label>
+          <input type="text" pInputText id="cantidad" formControlName="cantidad" required />
+          <small class="p-error" *ngIf="isFieldInvalid('cantidad')">
+            {{ getErrorMessage('cantidad') }}
+          </small>
+        </div>
+      </div>
+
+      <div class="field" [ngClass]="{'error': isFieldInvalid('motivo')}">
+        <label for="motivo">Motivo<span style="color: #E24C4C;">*</span></label>
+        <input type="text" pInputText id="motivo" formControlName="motivo" required />
+        <small class="p-error" *ngIf="isFieldInvalid('motivo')">
+          {{ getErrorMessage('motivo') }}
+        </small>
+      </div>
+    </form>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text custom-cancel-btn"
+      (click)="closeModal()"></button>
+    <button pButton pRipple [label]="isEditing ? 'Actualizar' : 'Guardar'" icon="pi pi-check"
+      class="p-button-text custom-save-btn" (click)="saveLoss()"></button>
+  </ng-template>
+</p-dialog>

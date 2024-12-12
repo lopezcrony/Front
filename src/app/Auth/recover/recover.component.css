@@ -1,0 +1,134 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+
+  background: linear-gradient(135deg, #3887BE 0%, #5AA6D8 35%, #89C5E8 70%, #B7E1F7 100%);
+  background-size: 300% 300%;
+  animation: gradientAnimation 8s ease-in-out infinite alternate;
+
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0
+}
+
+/* Efecto de brillo sutil en el fondo */
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 0%;
+  }
+  25% {
+    background-position: 100% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  75% {
+    background-position: 0% 100%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+} 
+
+.contenedor {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0e2ea;
+}
+
+.caja-recuperacion {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+.encabezado {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.boton-volver {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+  margin-right: 1rem;
+}
+
+.boton-volver:hover {
+  transform: translateX(-3px);
+}
+
+.icono-flecha {
+  width: 24px;
+  height: 24px;
+  color: #48bb78;
+}
+
+h2 {
+  margin: 0;
+  color: #333;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.grupo-input {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.icono-correo {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+  width: 20px;
+  height: 20px;
+}
+
+input[type="email"] {
+  width: 100%;
+  padding: 10px 10px 10px 40px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  text-align: left;
+}
+
+input[type="email"]::placeholder {
+  text-align: left;
+}
+
+.boton-enviar {
+  width: 100%;
+  padding: 10px;
+  background-color: #48bb78;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.boton-enviar:hover {
+  background-color: #38a169;
+}

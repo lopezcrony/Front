@@ -1,0 +1,37 @@
+<header class="topbar">
+  <button (click)="toggleSidebarVisibility()" class="menu"> <i class="pi pi-bars"></i> </button>
+
+
+  <img src="/logo-name.JPG" alt="ComerciPlus" class="logo">
+
+
+  <button (click)="logout()" class="btn-logout"> <i class="pi pi-sign-out"></i> Cerrar sesión </button>
+
+  <!-- Botón de usuario que muestra el overlay con la información -->
+  <button 
+  pButton 
+  type="button" 
+  class="p-button-text" 
+  (mouseenter)="op.show($event)" 
+  (mouseleave)="op.hide()" 
+  icon="pi pi-user">
+</button>
+
+  <p-overlayPanel #op>
+    <ng-container *ngIf="userData">
+      <div class="user-info-container">
+        <div class="user-avatar-name">
+          <p-avatar icon="pi pi-user" [style]="{'background-color': '#2196F3', 'color': '#ffffff'}"
+            shape="circle">
+          </p-avatar>
+          <h3>{{userData.nombreUsuario}} {{userData.apellidoUsuario}}</h3>
+        </div>
+  
+        <div class="user-details">
+          <p>{{userData.correoUsuario}}</p>
+          <p class="user-role">{{userData.nombreRol}}</p>
+        </div>
+      </div>
+    </ng-container>
+  </p-overlayPanel>  
+</header>

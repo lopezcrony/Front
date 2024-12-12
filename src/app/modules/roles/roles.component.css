@@ -1,0 +1,63 @@
+.role-form {
+    .permissions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1rem;
+      padding: 1rem 0;
+    }
+  
+    .permission-card {
+      background: var(--surface-card);
+      border: 1px solid var(--surface-border);
+      border-radius: 6px;
+      padding: 1rem;
+  
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid var(--surface-border);
+  
+        .module-title {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          font-weight: 600;
+  
+          i {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+          }
+        }
+      }
+  
+      .permissions-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+  
+        .permission-item {
+          display: flex;
+          align-items: center;
+        }
+      }
+    }
+  }
+  
+  :host ::ng-deep {
+    .p-dialog {
+      .p-dialog-content {
+        max-height: 80vh;
+        overflow-y: auto;
+      }
+    }
+  
+    .p-checkbox {
+      .p-checkbox-box {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }

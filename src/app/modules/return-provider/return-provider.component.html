@@ -1,0 +1,78 @@
+<app-crud 
+[Module]="'Devolución por Proveedor'"
+[items]="filteredReturnProvider" 
+[columns]="colums" 
+[canDelete]="false" 
+[canExport]="false" 
+[canEdit]="false"
+[canSeeDetail]="false"
+[SelectChangeStatus]="true"
+
+[canChangeStatus]="false"
+[showStateColumn]="true"
+[statusField]="'estado'"
+
+[actions]="false" 
+(create)="openCreateModal()" 
+(search)="searchreturnProvider($event)"
+(changeStatusProvider)="changeReturnProviderStatus($event)">
+</app-crud>
+
+<!-- FORMULARIOS -->
+
+<p-dialog [(visible)]="showModal" [style]="{width: '450px'}"
+    [header]="isEditing ? 'Editar Cliente' : 'Registrar devolución a proveedor '" [modal]="true" class="p-fluid" appCrudModal
+    [isEditing]="isEditing" (save)="savereturnProvider()" (cancel)="closeModal()">
+    <ng-template pTemplate="content">
+        <form [formGroup]="returnProviderForm">
+
+            <div class="field-group">
+                <div class="field" [ngClass]="{'error': isFieldInvalid('idProveedor')}">
+                    <label for="proveedor">Proveedores<span style="color: #E24C4C;">*</span></label>
+                    <div class="p-inputgroup">
+                        <p-dropdown [options]="providers" formControlName="idProveedor" optionLabel="nombreProveedor"
+                            optionValue="idProveedor" placeholder="Seleccionar proveedor" [virtualScroll]="true"
+                            [virtualScrollItemSize]="38" styleClass="w-full">
+                        </p-dropdown>
+                       
+                    </div>
+                    <small class="p-error" *ngIf="isFieldInvalid('idProveedor')">
+                        {{ getErrorMessage('idProveedor') }}
+                    </small>
+                </div>
+            </div>
+            <div class="field-group">
+                <div class="field" [ngClass]="{'error': isFieldInvalid('CodigoProducto')}">
+                    <label for="CodigoProducto">Codigo Barra<span style="color: #E24C4C;">*</span></label>
+                    <input type="text" pInputText id="CodigoProducto" formControlName="CodigoProducto" (focus)="startListeningToScanner()" 
+                    (blur)="stopListeningToScanner()" required />
+                    <small class="p-error" *ngIf="isFieldInvalid('CodigoProducto')">
+                        {{ getErrorMessage('CodigoProducto') }}
+                    </small>
+                </div>
+
+                <div class="field" [ngClass]="{'error': isFieldInvalid('cantidad')}">
+                    <label for="cantidad">cantidad<span style="color: #E24C4C;">*</span></label>
+                    <input type="text" pInputText id="cantidad" formControlName="cantidad" required />
+                    <small class="p-error" *ngIf="isFieldInvalid('cantidad')">
+                        {{ getErrorMessage('cantidad') }}
+                    </small>
+                </div>
+            </div>
+
+            <div class="field" [ngClass]="{'error': isFieldInvalid('motivoDevolucion')}">
+                <label for="motivoDevolucion">Motivo<span style="color: #E24C4C;">*</span></label>
+                <input type="text" pInputText id="motivoDevolucion" formControlName="motivoDevolucion" required />
+                <small class="p-error" *ngIf="isFieldInvalid('motivoDevolucion')">
+                    {{ getErrorMessage('motivoDevolucion') }}
+                </small>
+            </div>
+        </form>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text custom-cancel-btn"
+            (click)="closeModal()"></button>
+        <button pButton pRipple [label]="isEditing ? 'Actualizar' : 'Guardar'" icon="pi pi-check"
+            class="p-button-text custom-save-btn" (click)="savereturnProvider()"></button>
+    </ng-template>
+</p-dialog>
