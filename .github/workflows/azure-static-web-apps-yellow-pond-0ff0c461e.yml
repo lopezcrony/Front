@@ -24,7 +24,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16' # Cambia esta versión según la que necesites, por ejemplo '14', '18', etc.
+          node-version: '20' # Cambia esta versión según la que necesites, por ejemplo '14', '18', etc.
 
       - name: Build And Deploy
         id: builddeploy
